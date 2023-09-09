@@ -15,7 +15,7 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://rpc.ftm.tools/`,
+        url: `http://127.0.0.1:8545/`,
       },
       accounts: {
         count: 3,
