@@ -1,25 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config({ path: ".env" });
 
-const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
-
-const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
-
-
-const DEFAULT_BLOCK_GAS_LIMIT = 6000000;
-const DEFAULT_GAS_MUL = 5;
-const DEFAULT_GAS_PRICE = 2000000000;
-
 
 module.exports = {
   networks: {
-    hardhat: {
-      forking: {
-        url: `http://127.0.0.1:8545/`,
-      },
-      accounts: {
-        count: 3,
-      }
+    local: {
+      url: `http://127.0.0.1:8545/`,
+      accounts: [process.env.privateKey],
     },
     aurora: {
       url: `https://mainnet.aurora.dev`,
