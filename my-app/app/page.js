@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import Web3Modal from 'web3modal';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-import Web3 from 'web3';
-import YourContractABI from 'YourContractABI';
+'use client';
+
+import React, { useEffect, useRef, useState } from "react";
+import Web3Modal from "web3modal";
+import { abi, CONTRACT_ADDRESS } from "../constants";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3";
+
 
 export default function Page() {
   const [account, setAccount] = useState('');
@@ -22,13 +25,15 @@ export default function Page() {
       walletconnect: {
         package: WalletConnectProvider,
         options: {
-          infuraId: 'YourInfuraId',
+          rpc: {
+            31337: 'http://127.0.0.1:8545/'
+          }
         },
       },
     };
-
+  
     const web3Modal = new Web3Modal({
-      network: 'mainnet',
+      network: 'LocalGnc',
       cacheProvider: true,
       providerOptions,
     });
@@ -36,7 +41,7 @@ export default function Page() {
     const provider = await web3Modal.connect();
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
-    const yourContract = new web3.eth.Contract(YourContractABI, 'YourContractAddress');
+    const yourContract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
 
     setAccount(accounts[0]);
     setContract(yourContract);
@@ -54,9 +59,14 @@ export default function Page() {
   return (
     <div>
       <button onClick={connectWallet}>Connect Wallet</button>
-      <input type="text" value={mood} onChange={e => setMood(e.target.value)} />
-      <button onClick={updateMood}>Update Mood</button>
-      <button onClick={fetchMood}>Fetch Mood</button>
+      {account && contract && (
+        <>
+          <input type="text" value={mood} onChange={e => setMood(e.target.value)} />
+          <button onClick={updateMood}>Update Mood</button>
+          <button onClick={fetchMood}>Fetch Mood</button>
+        </>
+      )}
     </div>
   );
+  
 }
