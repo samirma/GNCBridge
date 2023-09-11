@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Web3Modal from "web3modal";
-import { abi, CONTRACT_ADDRESS } from "../constants";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import Web3 from "web3";
-
+import { ethers } from "ethers";
+import { abi, CONTRACT_ADDRESS } from "../constants";
 
 export default function Page() {
   const [account, setAccount] = useState('');
@@ -39,20 +38,20 @@ export default function Page() {
     });
 
     const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    const yourContract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+    const web3Provider = new ethers.providers.Web3Provider(provider);
+    const signer = web3Provider.getSigner();
+    const yourContract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 
-    setAccount(accounts[0]);
+    setAccount(await signer.getAddress());
     setContract(yourContract);
   }
 
   async function updateMood() {
-    await contract.methods.setMood(mood).send({ from: account });
+    await contract.setMood(mood);
   }
 
   async function fetchMood() {
-    const mood = await contract.methods.getMood().call();
+    const mood = await contract.getMood();
     alert(`Mood is: ${mood}`);
   }
 
@@ -68,5 +67,4 @@ export default function Page() {
       )}
     </div>
   );
-  
 }
