@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ethers } from "ethers";
@@ -57,6 +57,13 @@ export default function Page() {
 
   return (
     <div>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/contract">Contract</Link></li>
+        </ul>
+      </nav>
+
       <button onClick={connectWallet}>Connect Wallet</button>
       {account && contract && (
         <>
