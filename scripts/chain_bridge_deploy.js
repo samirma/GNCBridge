@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 async function main() {
-  const ChainBridge = await hre.ethers.getContractFactory("ChainBridge");
-  const chainBridge = await ChainBridge.deploy();
-  await chainBridge.deployTransaction.wait(); // wait for the transaction to be mined
+  const chainBridge = await hre.ethers.deployContract("ChainBridge");
+
+  await chainBridge.waitForDeployment();
 
   console.log(`ChainBridge deployed to ${chainBridge.address}`);
 
@@ -16,9 +16,9 @@ async function main() {
   }
 
   fs.writeFileSync(
-    path.join(contractsDir, 'index.js'),
-    `export const BRIDGE_ADDRESS = "${chainBridge.address}";\n` +
-    `export const ABI_BRIDGE = ${JSON.stringify(ChainBridge.interface.format('json'), null, 2)};\n`
+    path.join(contractsDir, 'chainBridge.js'),
+    `export const BRIDGE_ADDRESS = "${chainBridge.target}";\n` +
+    `export const ABI_BRIDGE = ${JSON.stringify(chainBridge.interface.format('json'), null, 2)};\n`
   );
 }
 
