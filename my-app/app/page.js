@@ -1,10 +1,4 @@
-'use client';
-import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import { ethers } from "ethers";
-import { abi, CONTRACT_ADDRESS } from "../constants";
+'use client'
 
 export default function Page() {
   const [account, setAccount] = useState('');
