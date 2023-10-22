@@ -1,9 +1,9 @@
 'use client'
 
-import ChainBridge from './ChainBridge';
+import GNCForm from './GNCForm';
+import PolygonForm from './PolygonForm';
 import About from './about';
 import { useState } from "react";
-import React from 'react';
 
 export default function App() {
   const [state, setState] = useState("home");
@@ -14,14 +14,16 @@ export default function App() {
             <ul>
                 <li><a onClick={() => setState('home')}>Home</a></li>
                 <li><a onClick={() => setState('about')}>About</a></li>
-                <li><a onClick={() => setState('chainbridge')}>Chain Bridge</a></li>
+                <li><a onClick={() => setState('gnc')}>GNC</a></li>
+                <li><a onClick={() => setState('polygon')}>Polygon</a></li>
             </ul>
         </nav>
 
         <p>Current state: {state}</p>
 
         {state === 'about' && <About />}
-        {state === 'chainbridge' && <ChainBridge />}
+        {state === 'gnc' && <GNCForm />}
+        {state === 'polygon' && <PolygonForm />}
     </div>
   );
 }

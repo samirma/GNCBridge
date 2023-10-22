@@ -2,31 +2,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import Web3Modal from 'web3modal';
 import { BRIDGE_ADDRESS, ABI_BRIDGE } from '../constants/chainBridge';
+import { web3ModalGnc } from './web3Modals';
 
 let provider = null;
 let signer = null;
 let chainBridge = null;
 
-const web3Modal = new Web3Modal();
 
-async function connectWallet() {
-    const web3Provider = await web3Modal.connect();
-    provider = new ethers.providers.Web3Provider(web3Provider);
-    const network = await provider.getNetwork();
-    if (network.chainId !== 31337) {
-        throw new Error('Please connect to the correct network (id: 31337)');
-    }
-    signer = provider.getSigner();
-    chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
-}
 
-function ChainBridge() {
+function GNCForm() {
     const [connected, setConnected] = useState(false);
     const [balance, setBalance] = useState(0);
     const [recipient, setRecipient] = useState('');
     const [amount, setAmount] = useState('');
+
+    async function connectWallet() {
+        const web3Provider = await web3ModalGnc.connect();
+        provider = new ethers.providers.Web3Provider(web3Provider);
+        const network = await provider.getNetwork();
+        if (network.chainId !== 31337) {
+            throw new Error('Please connect to the correct network (id: 31337)');
+        } else {
+            setConnected(true);
+        }
+        signer = provider.getSigner();
+        chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
+    }
 
     useEffect(() => {
         async function fetchBalance() {
@@ -68,4 +70,4 @@ function ChainBridge() {
     );
 }
 
-export default ChainBridge;
+export default GNCForm;
