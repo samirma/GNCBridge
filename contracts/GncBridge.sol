@@ -4,6 +4,9 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract GncBridge is Ownable {
+    
+    constructor(address initialOwner) Ownable(initialOwner) {}
+
     event BalanceBeforeTransfer(address indexed _to, uint256 balance);
     event BalanceAfterTransfer(address indexed _to, uint256 balance);
 

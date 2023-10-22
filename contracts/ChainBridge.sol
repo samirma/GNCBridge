@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract ChainBridge is Ownable {
+    constructor(address initialOwner) Ownable(initialOwner) {}
+    
     IERC20 public token;
 
     event BalanceBeforeTransfer(address indexed _to, uint256 balance);
