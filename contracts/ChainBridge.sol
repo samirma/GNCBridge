@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract ChainBridge is Ownable {
+    
     constructor(address initialOwner) Ownable(initialOwner) {}
     
     IERC20 public token;
@@ -18,6 +19,16 @@ contract ChainBridge is Ownable {
 
     function getBalance() public view returns (uint256) {
         return token.balanceOf(address(this));
+    }
+
+    function depositToken(uint256 _amount) public {
+        require(token.balanceOf(msg.sender) >= _amount, "Not enough balance");
+        token.transferFrom(msg.sender, address(this), _amount);
+    }
+
+    function withdrawToken(uint256 _amount) public {
+        require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
+        token.transfer(msg.sender, _amount);
     }
 
     function transferToken(address _to, uint256 _amount) public onlyOwner {
