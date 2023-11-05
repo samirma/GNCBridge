@@ -1,7 +1,5 @@
 const hre = require("hardhat");
 const helpers = require("@nomicfoundation/hardhat-network-helpers");
-const fs = require('fs');
-const path = require('path');
 
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
@@ -21,19 +19,6 @@ async function main() {
     const test = await token.waitForDeployment();
 
     console.log("Token contract deployed to:", token.target);
-
-    const contractsDir = path.join(__dirname, '..', 'my-app', 'constants');
-  
-    if (!fs.existsSync(contractsDir)) {
-      fs.mkdirSync(contractsDir);
-    }
-  
-    fs.writeFileSync(
-      path.join(contractsDir, 'token.js'),
-      `export const TOKEN_ADDRESS = "${test.target}";\n` +
-      `export const TOKEN_ABI = ${JSON.stringify(test.interface.format('json'), null, 2)};\n`
-    );
-
 }
 
 main()
