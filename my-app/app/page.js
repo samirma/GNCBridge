@@ -3,6 +3,7 @@
 import GNCForm from './GNCForm';
 import PolygonForm from './PolygonForm';
 import About from './about';
+import MintToken from './MintToken';
 import { useState } from "react";
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
                 <li><a onClick={() => setState('about')}>About</a></li>
                 <li><a onClick={() => setState('gnc')}>GNC</a></li>
                 <li><a onClick={() => setState('polygon')}>Polygon</a></li>
+                <li><a onClick={() => setState('MintToken')}>Mint</a></li>
             </ul>
         </nav>
 
@@ -24,6 +26,7 @@ export default function App() {
         {state === 'about' && <About />}
         {state === 'gnc' && <GNCForm />}
         {state === 'polygon' && <PolygonForm />}
+        {state === 'MintToken' && <MintToken />}
     </div>
   );
 }
