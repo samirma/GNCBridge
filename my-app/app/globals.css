@@ -25,3 +25,77 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+nav {
+  background: #333;
+  color: #fff;
+  padding: 15px 0;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+
+button {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+button:hover {
+  color: #fff;
+  background-color: #33b5e5;
+  border-color: #33b5e5;
+}
+
+h1 {
+  color: #333;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  color: #333; /* This will make the text color dark */
+}
