@@ -5,6 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Token is ERC20, Ownable {
+
+    string private message;
+        
     constructor(address initialOwner)
         ERC20("Token", "TKN")
         Ownable(initialOwner)
@@ -16,8 +19,12 @@ contract Token is ERC20, Ownable {
         _mint(msg.sender, amount);
     }
 
-    function getTestString() public pure returns (string memory) {
-        return "test";
+    function setMessage(string memory amount) public {
+        message = amount;
+    }
+
+    function getMessage() public view returns (string memory) {
+        return message;
     }
 
 }

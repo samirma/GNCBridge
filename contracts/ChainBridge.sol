@@ -8,30 +8,25 @@ contract ChainBridge is Ownable {
     
     constructor(address initialOwner) Ownable(initialOwner) {}
     
-    IERC20 public token;
-
     event BalanceBeforeTransfer(address indexed _to, uint256 balance);
     event BalanceAfterTransfer(address indexed _to, uint256 balance);
 
-    function setToken(address _token) public onlyOwner {
-        token = IERC20(_token);
-    }
-
-    function getBalance() public view returns (uint256) {
-        return token.balanceOf(address(this));
-    }
-
-    function depositToken(uint256 _amount) public {
+    function depositToken(address _token, uint256 _amount) public {
+        IERC20 token = IERC20(_token);
         require(token.balanceOf(msg.sender) >= _amount, "Not enough balance");
+        uint256 allowance = token.allowance(msg.sender, address(this));
+        require(allowance >= _amount, "Check the token allowance");
         token.transferFrom(msg.sender, address(this), _amount);
     }
 
-    function withdrawToken(uint256 _amount) public {
+    function withdrawToken(address _token, uint256 _amount) public {
+        IERC20 token = IERC20(_token);
         require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
         token.transfer(msg.sender, _amount);
     }
 
-    function transferToken(address _to, uint256 _amount) public onlyOwner {
+    function transferToken(address _token, address _to, uint256 _amount) public onlyOwner {
+        IERC20 token = IERC20(_token);
         require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
 
         uint256 balanceBeforeTransfer = token.balanceOf(_to);

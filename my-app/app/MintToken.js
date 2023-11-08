@@ -50,8 +50,10 @@ function MintToken() {
     }
 
     async function fetchString() {
-        const returnedString_ = await tokenContract.getTestString();
-        setReturnedString(returnedString_);
+        setReturnedString(await tokenContract.getMessage());
+        await tokenContract.setMessage(amount);
+        const returnedString_ = await tokenContract.getMessage();
+        setReturnedString(await tokenContract.getMessage());
     }
 
     if (!connected) {
