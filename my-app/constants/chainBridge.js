@@ -1,4 +1,4 @@
-export const BRIDGE_ADDRESS = "0xb925e0eFFf06B3a34D47888B47F3D886a685Ad05";
+export const BRIDGE_ADDRESS = "0xbfC2A40F10487e41FA8D40DfB0e17EF453970772";
 export const ABI_BRIDGE = [
   "constructor(address)",
   "error OwnableInvalidOwner(address)",
@@ -8,12 +8,9 @@ export const ABI_BRIDGE = [
   "event Deposit(address,uint256)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "function depositToken(address,uint256)",
-  "function depositToken(address,uint256)",
   "function owner() view returns (address)",
   "function renounceOwnership()",
   "function transferOwnership(address)",
-  "function transferToken(address,address,uint256)",
-  "function withdrawToken(address,uint256)"
   "function transferToken(address,address,uint256)",
   "function withdrawToken(address,uint256)"
 ];

@@ -10,9 +10,6 @@ npx hardhat node --fork https://rpc.ftm.tools/
 npx hardhat run --network local scripts/gnc_bridge_deploy.js
 npx hardhat run --network local scripts/chain_bridge_deploy.js
 npx hardhat run --network local scripts/token_deploy.js 
-npx hardhat run --network local scripts/gnc_bridge_deploy.js
-npx hardhat run --network local scripts/chain_bridge_deploy.js
-npx hardhat run --network local scripts/token_deploy.js 
 ```
 
 
