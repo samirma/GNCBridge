@@ -28,10 +28,9 @@ function GNCForm() {
             signer = await provider.getSigner();
             chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
             setConnected(true);
-            fetchBalance(); // Fetch balance after connecting wallet
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            setError("Fail on connectWallet" + error.message);
         } finally {
             setLoading(false);
         }
@@ -40,7 +39,6 @@ function GNCForm() {
     async function fetchBalance() {
         setLoading(true);
         try {
-            await connectWallet();
             const userAddress = await signer.getAddress();
             const userBalance = await provider.getBalance(userAddress);
             const contractBal = await provider.getBalance(BRIDGE_ADDRESS);
@@ -48,15 +46,17 @@ function GNCForm() {
             setContractBalance(ethers.formatUnits(contractBal, decimals));
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            setError("Fail on fetchBalance: " + error.message);
         } finally {
             setLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchBalance();
-    }, [decimals, connected]);
+        if (connected) {
+            fetchBalance();
+        }
+    }, [connected]);
 
     async function handleDeposit() {
         setLoading(true);
@@ -73,7 +73,6 @@ function GNCForm() {
             setAmount(''); // Clear the input field
         } catch (error) {
             console.error(error);
-            setTransactionStatus('Deposit failed: ' + error.message);
             setError(error.message);
         } finally {
             setLoading(false);

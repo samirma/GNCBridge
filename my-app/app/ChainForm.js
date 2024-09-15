@@ -25,6 +25,7 @@ function ChainForm() {
 
     async function connectWallet() {
         setLoading(true);
+        setError('');
         try {
             provider = new ethers.BrowserProvider(window.ethereum)
             const network = await provider.getNetwork();
@@ -37,41 +38,43 @@ function ChainForm() {
             setConnected(true);
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            setError("Fail on connectWallet" + error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function fetchBalance() {
+        setLoading(true);
+        setError('');
+        try {
+            const balance = await token.balanceOf(await signer.getAddress());
+            setBalance(ethers.formatUnits(balance, decimals));
+
+            const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
+            setContractBalance(ethers.formatUnits(contractBalance, decimals));
+
+            const allowance = await token.allowance(await signer.getAddress(), BRIDGE_ADDRESS);
+            if (allowance > 0) {
+                setIsApproved(true);
+                setTransactionStatus('Token is already approved');
+            } else {
+                setIsApproved(false);
+                setTransactionStatus('Token is not approved');
+            }
+        } catch (error) {
+            console.error(error);
+            setError("Fail on fetchBalance: " + error.message);
         } finally {
             setLoading(false);
         }
     }
 
     useEffect(() => {
-        async function fetchBalance() {
-            setLoading(true);
-            try {
-                await connectWallet();
-                const balance = await token.balanceOf(await signer.getAddress());
-                setBalance(ethers.formatUnits(balance, decimals));
-
-                const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
-                setContractBalance(ethers.formatUnits(contractBalance, decimals));
-
-                const allowance = await token.allowance(await signer.getAddress(), BRIDGE_ADDRESS);
-                if (allowance > 0) {
-                    setIsApproved(true);
-                    setTransactionStatus('Token is already approved');
-                } else {
-                    setIsApproved(false);
-                    setTransactionStatus('Token is not approved');
-                }
-            } catch (error) {
-                console.error(error);
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
+        if (connected) {
+            fetchBalance();
         }
-
-        fetchBalance();
-    }, [decimals]);
+    }, [connected]);
 
     async function handleApprove() {
         setLoading(true);
