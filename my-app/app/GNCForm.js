@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { BRIDGE_ADDRESS, ABI_BRIDGE } from '../constants/chainBridge';
-import { web3ModalGnc } from './web3Modals';
 
 let provider = null;
 let signer = null;

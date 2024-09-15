@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { TOKEN_ADDRESS, TOKEN_ABI } from '../constants/token';
-import { web3ModalPolygon } from './web3Modals';
 
 let provider = null;
 let signer = null;

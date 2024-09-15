@@ -7,7 +7,7 @@ import MintToken from './MintToken';
 import { useState } from "react";
 
 export default function App() {
-  const [state, setState] = useState("home");
+  const [state, setState] = useState("polygon");
 
   return (
     <div>
