@@ -8,7 +8,6 @@ let provider = null;
 let signer = null;
 let chainBridge = null;
 
-
 function GNCForm() {
     const [connected, setConnected] = useState(false);
     const [balance, setBalance] = useState(0);
@@ -19,14 +18,14 @@ function GNCForm() {
 
     async function connectWallet() {
         try {
-            provider = new ethers.BrowserProvider(window.ethereum)
+            provider = new ethers.BrowserProvider(window.ethereum);
             const network = await provider.getNetwork();
             if (network.chainId !== 31337) {
                 await switchNetwork();
             } else {
                 setConnected(true);
             }
-            signer = provider.getSigner();
+            signer = await provider.getSigner();
             chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
         } catch (err) {
             setError(err.message);
