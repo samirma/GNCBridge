@@ -8,9 +8,12 @@ export const ABI_BRIDGE = [
   "event Deposit(address,uint256)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "function depositToken(address,uint256)",
+  "function depositToken(address,uint256)",
   "function owner() view returns (address)",
   "function renounceOwnership()",
   "function transferOwnership(address)",
+  "function transferToken(address,address,uint256)",
+  "function withdrawToken(address,uint256)"
   "function transferToken(address,address,uint256)",
   "function withdrawToken(address,uint256)"
 ];

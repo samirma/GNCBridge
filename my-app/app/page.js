@@ -19,6 +19,8 @@ export default function App() {
                 <li><a onClick={() => setState('polygon')}>Polygon</a></li>
                 <li><a onClick={() => setState('gnc')}>GNC</a></li>
                 <li><a onClick={() => setState('MintToken')}>Mint</a></li>
+                <li><a onClick={() => setState('gnc')}>GNC</a></li>
+                <li><a onClick={() => setState('MintToken')}>Mint</a></li>
             </ul>
         </nav>
 
