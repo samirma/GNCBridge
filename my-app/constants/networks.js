@@ -1,3 +1,5 @@
+import { GNC, CHAIN } from './envConfig';
+
 const networks = {
   'local': {
       chainId: '0x7A69', // Hexadecimal for 31337
@@ -54,30 +56,10 @@ function getNetworkConfig(networkName) {
 };
 
 export function getChainNetwork() {
-  return {
-    chainId: '0x7A69', // Hexadecimal for 31337
-    chainName: 'Localhost 31337',
-    nativeCurrency: {
-        name: 'ETH',
-        symbol: 'ETH',
-        decimals: 18,
-    },
-    rpcUrls: ['http://localhost:8545'],
-    blockExplorerUrls: ['http://localhost:8545'],
-};
+  return getNetworkConfig(CHAIN);
 };
 
 export function getGNCNetwork() {
-    return {
-        chainId: '0x7A69', // Hexadecimal for 31337
-        chainName: 'Localhost 31337',
-        nativeCurrency: {
-            name: 'ETH',
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        rpcUrls: ['http://localhost:8545'],
-        blockExplorerUrls: ['http://localhost:8545'],
-    };
+    return getNetworkConfig(GNC);
 };
 

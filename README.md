@@ -1,4 +1,4 @@
-# Sample Hardhat Project
+# GNC Bridge Front-end
 
 
 ```shell
@@ -16,3 +16,6 @@ npx hardhat run --network local scripts/token_deploy.js
 ```shell
 npx hardhat run --network local scripts/transfer.js
 ```
+
+Update env file:
+my-app/constants/envConfig.js

@@ -1,9 +1,10 @@
 'use client'
 
 import GNCForm from './GNCForm';
-import PolygonForm from './PolygonForm';
+import ChainForm from './ChainForm';
 import About from './about';
 import MintToken from './MintToken';
+import Env from './enviroment';
 import { useState } from "react";
 
 export default function App() {
@@ -25,8 +26,11 @@ export default function App() {
 
         {state === 'about' && <About />}
         {state === 'gnc' && <GNCForm />}
-        {state === 'polygon' && <PolygonForm />}
+        {state === 'polygon' && <ChainForm />}
         {state === 'MintToken' && <MintToken />}
+
+        <Env/>
+
     </div>
   );
 }
