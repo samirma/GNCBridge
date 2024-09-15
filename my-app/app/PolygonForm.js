@@ -32,29 +32,6 @@ function PolygonForm() {
             chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
             token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
             setConnected(true);
-            await fetchBalance(); // Reload values after connecting wallet
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function fetchBalance() {
-        setLoading(true);
-        try {
-            const balance = await token.balanceOf(signer.getAddress());
-            setBalance(ethers.utils.formatUnits(balance, await token.decimals())); // Adjust for token decimals
-
-            const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
-            setContractBalance(ethers.utils.formatUnits(contractBalance, await token.decimals())); // Adjust for token decimals
-
-            const allowance = await token.allowance(signer.getAddress(), BRIDGE_ADDRESS);
-            if (allowance.gt(0)) {
-                setTransactionStatus('Token is already approved');
-            } else {
-                setTransactionStatus('Token is not approved');
-            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -63,21 +40,37 @@ function PolygonForm() {
     }
 
     useEffect(() => {
-        if (connected) {
-            fetchBalance();
+        async function fetchBalance() {
+            setLoading(true);
+            try {
+                await connectWallet();
+                const balance = await token.balanceOf(signer.getAddress());
+                setBalance(ethers.utils.formatEther(balance));
+
+                const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
+                setContractBalance(ethers.utils.formatEther(contractBalance));
+
+                const allowance = await token.allowance(signer.getAddress(), BRIDGE_ADDRESS);
+                if (allowance.gt(0)) {
+                    setTransactionStatus('Token is already approved');
+                } else {
+                    setTransactionStatus('Token is not approved');
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         }
-    }, [connected]);
+
+        fetchBalance();
+    }, []);
 
     async function handleTransfer() {
-        if (!amount || ethers.utils.parseUnits(amount, await token.decimals()).gt(balance)) {
-            setTransactionStatus('Invalid amount');
-            return;
-        }
-
         setLoading(true);
         try {
             setTransactionStatus('Initiating transfer...');
-            const amountToTransfer = ethers.utils.parseUnits(amount, await token.decimals()); // Adjust for token decimals
+            const amountToTransfer = ethers.utils.parseUnits(amount, 'ether'); // Assuming token has 18 decimals
             const allowance = await token.allowance(signer.getAddress(), BRIDGE_ADDRESS);
 
             if (allowance.lt(amountToTransfer)) {
@@ -92,7 +85,10 @@ function PolygonForm() {
             const transferTx = await chainBridge.depositToken(TOKEN_ADDRESS, amountToTransfer);
             await transferTx.wait();
 
-            await fetchBalance(); // Reload values after transfer
+            const balance = await token.balanceOf(signer.getAddress());
+            const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
+            setBalance(ethers.utils.formatEther(balance));
+            setContractBalance(ethers.utils.formatEther(contractBalance));
             setTransactionStatus('Transfer successful!');
         } catch (error) {
             console.error(error);
@@ -124,7 +120,7 @@ function PolygonForm() {
             <p>Balance: {balance}</p>
             <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} />
             <button className="button" onClick={setMaxAmount}>Set Max</button>
-            <button className="button" onClick={handleTransfer} disabled={!amount || ethers.utils.parseUnits(amount, await token.decimals()).gt(balance)}>Send to GNC</button>
+            <button className="button" onClick={handleTransfer}>Send to GNC</button>
             <p>{transactionStatus}</p>
         </div>
     );
