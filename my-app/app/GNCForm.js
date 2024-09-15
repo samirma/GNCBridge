@@ -40,6 +40,7 @@ function GNCForm() {
     async function fetchBalance() {
         setLoading(true);
         try {
+            await connectWallet();
             const userAddress = await signer.getAddress();
             const userBalance = await provider.getBalance(userAddress);
             const contractBal = await provider.getBalance(BRIDGE_ADDRESS);
@@ -54,15 +55,14 @@ function GNCForm() {
     }
 
     useEffect(() => {
-        if (connected) {
-            fetchBalance();
-        }
+        fetchBalance();
     }, [decimals, connected]);
 
     async function handleDeposit() {
         setLoading(true);
         setError('');
         try {
+            await connectWallet();
             setTransactionStatus('Initiating deposit...');
             const amountToDeposit = ethers.parseUnits(amount, decimals);
             const depositTx = await chainBridge.deposit(amountToDeposit, { value: amountToDeposit });

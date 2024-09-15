@@ -15,12 +15,10 @@ export default function App() {
         <nav>
             <ul>
                 <li><a onClick={() => setState('home')}>Home</a></li>
-                <li><a onClick={() => setState('about')}>About</a></li>
                 <li><a onClick={() => setState('polygon')}>Polygon</a></li>
                 <li><a onClick={() => setState('gnc')}>GNC</a></li>
                 <li><a onClick={() => setState('MintToken')}>Mint</a></li>
-                <li><a onClick={() => setState('gnc')}>GNC</a></li>
-                <li><a onClick={() => setState('MintToken')}>Mint</a></li>
+                <li><a onClick={() => setState('about')}>About</a></li>
             </ul>
         </nav>
 
