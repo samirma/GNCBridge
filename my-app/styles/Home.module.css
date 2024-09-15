@@ -34,7 +34,6 @@
   
   .button {
     border-radius: 4px;
-    background-color: blue;
     border: none;
     color: #ffffff;
     font-size: 15px;
@@ -42,7 +41,17 @@
     width: 200px;
     cursor: pointer;
     margin-bottom: 2%;
-  }
+}
+
+.button:enabled {
+    background-color: #4CAF50; /* Green for enabled state */
+}
+
+.button:disabled {
+    background-color: #555555; /* Gray for disabled state */
+    cursor: not-allowed;
+}
+
   @media (max-width: 1000px) {
     .main {
       width: 100%;

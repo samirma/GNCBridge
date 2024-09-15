@@ -21,6 +21,7 @@ function ChainForm() {
     const [loading, setLoading] = useState(false);
     const [decimals, setDecimals] = useState(18); // Default to 18 decimals
     const [isApproved, setIsApproved] = useState(false);
+    const [error, setError] = useState('');
 
     async function connectWallet() {
         setLoading(true);
@@ -36,6 +37,7 @@ function ChainForm() {
             setConnected(true);
         } catch (error) {
             console.error(error);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -62,6 +64,7 @@ function ChainForm() {
                 }
             } catch (error) {
                 console.error(error);
+                setError(error.message);
             } finally {
                 setLoading(false);
             }
@@ -72,6 +75,7 @@ function ChainForm() {
 
     async function handleApprove() {
         setLoading(true);
+        setError('');
         try {
             setTransactionStatus('Approving token transfer...');
             const maxUint256 = ethers.MaxUint256;
@@ -81,6 +85,7 @@ function ChainForm() {
             setTransactionStatus('Approved');
         } catch (error) {
             console.error(error);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -88,6 +93,7 @@ function ChainForm() {
 
     async function handleTransfer() {
         setLoading(true);
+        setError('');
         try {
             setTransactionStatus('Initiating transfer...');
             const amountToTransfer = ethers.parseUnits(amount, decimals);
@@ -99,12 +105,19 @@ function ChainForm() {
             setBalance(ethers.formatUnits(balance, decimals));
             setContractBalance(ethers.formatUnits(contractBalance, decimals));
             setTransactionStatus('Transfer successful!');
+            setAmount(''); // Clear the input field
         } catch (error) {
             console.error(error);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
     }
+
+    const isValidAmount = (value) => {
+        // Add your validation logic here (e.g., check if the value is a positive number)
+        return !isNaN(value) && Number(value) > 0;
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -125,7 +138,7 @@ function ChainForm() {
             <p>Balance: {balance}</p>
             <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} />
             {!isApproved && <button className="button" onClick={handleApprove}>Approve</button>}
-            {isApproved && <button className="button" onClick={handleTransfer}>Send to GNC</button>}
+            {isApproved && <button className="button" disabled={!isValidAmount(amount)} onClick={handleTransfer}>Send to GNC</button>}
             <p>{transactionStatus}</p>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
