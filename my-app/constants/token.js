@@ -1,6 +1,6 @@
-export const TOKEN_ADDRESS = "0x22753E4264FDDc6181dc7cce468904A80a363E44";
+export const TOKEN_ADDRESS = "0xFAeC51FA247019EA0100844dAF6a8D704884f55A";
 export const TOKEN_ABI = [
-  "constructor(address) nonpayable",
+  "constructor(address)",
   "error ERC20InsufficientAllowance(address,uint256,uint256)",
   "error ERC20InsufficientBalance(address,uint256,uint256)",
   "error ERC20InvalidApprover(address)",

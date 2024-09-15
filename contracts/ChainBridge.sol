@@ -10,6 +10,7 @@ contract ChainBridge is Ownable {
     
     event BalanceBeforeTransfer(address indexed _to, uint256 balance);
     event BalanceAfterTransfer(address indexed _to, uint256 balance);
+    event Deposit(address by, uint256 amount);
 
     function depositToken(address _token, uint256 _amount) public {
         IERC20 token = IERC20(_token);
@@ -17,6 +18,7 @@ contract ChainBridge is Ownable {
         uint256 allowance = token.allowance(msg.sender, address(this));
         require(allowance >= _amount, "Check the token allowance");
         token.transferFrom(msg.sender, address(this), _amount);
+        emit Deposit(msg.sender, _amount);
     }
 
     function withdrawToken(address _token, uint256 _amount) public {
