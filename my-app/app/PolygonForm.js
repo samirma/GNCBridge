@@ -4,12 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { BRIDGE_ADDRESS, ABI_BRIDGE } from '../constants/chainBridge';
 import { TOKEN_ADDRESS, TOKEN_ABI } from '../constants/token';
-import Web3Modal from 'web3modal';
 
-const web3ModalPolygon = new Web3Modal({
-    cacheProvider: true,
-    providerOptions: {} // Add any specific provider options here
-});
 
 let provider = null;
 let signer = null;
@@ -29,13 +24,12 @@ function PolygonForm() {
     async function connectWallet() {
         setLoading(true);
         try {
-            const web3Provider = await web3ModalPolygon.connect();
-            provider = new ethers.providers.Web3Provider(web3Provider);
+            provider = new ethers.BrowserProvider(window.ethereum)
             const network = await provider.getNetwork();
             if (network.chainId !== 31337) {
                 await provider.send('wallet_switchEthereumChain', [{ chainId: '0x7A69' }]); // 31337 in hex
             }
-            signer = provider.getSigner();
+            signer = await provider.getSigner();
             chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
             token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
             const tokenDecimals = await token.decimals();
@@ -53,14 +47,14 @@ function PolygonForm() {
             setLoading(true);
             try {
                 await connectWallet();
-                const balance = await token.balanceOf(signer.getAddress());
-                setBalance(ethers.utils.formatUnits(balance, decimals));
+                const balance = await token.balanceOf(await signer.getAddress());
+                setBalance(ethers.formatUnits(balance, decimals));
 
                 const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
-                setContractBalance(ethers.utils.formatUnits(contractBalance, decimals));
+                setContractBalance(ethers.formatUnits(contractBalance, decimals));
 
-                const allowance = await token.allowance(signer.getAddress(), BRIDGE_ADDRESS);
-                if (allowance.gt(0)) {
+                const allowance = await token.allowance(await signer.getAddress(), BRIDGE_ADDRESS);
+                if (allowance > 0) {
                     setIsApproved(true);
                     setTransactionStatus('Token is already approved');
                 } else {
@@ -81,7 +75,7 @@ function PolygonForm() {
         setLoading(true);
         try {
             setTransactionStatus('Approving token transfer...');
-            const maxUint256 = ethers.constants.MaxUint256;
+            const maxUint256 = ethers.MaxUint256;
             const approveTx = await token.approve(BRIDGE_ADDRESS, maxUint256);
             await approveTx.wait();
             setIsApproved(true);
@@ -97,14 +91,14 @@ function PolygonForm() {
         setLoading(true);
         try {
             setTransactionStatus('Initiating transfer...');
-            const amountToTransfer = ethers.utils.parseUnits(amount, decimals);
+            const amountToTransfer = ethers.parseUnits(amount, decimals);
             const transferTx = await chainBridge.depositToken(TOKEN_ADDRESS, amountToTransfer);
             await transferTx.wait();
 
-            const balance = await token.balanceOf(signer.getAddress());
+            const balance = await token.balanceOf(await signer.getAddress());
             const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
-            setBalance(ethers.utils.formatUnits(balance, decimals));
-            setContractBalance(ethers.utils.formatUnits(contractBalance, decimals));
+            setBalance(ethers.formatUnits(balance, decimals));
+            setContractBalance(ethers.formatUnits(contractBalance, decimals));
             setTransactionStatus('Transfer successful!');
         } catch (error) {
             console.error(error);

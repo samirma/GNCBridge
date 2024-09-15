@@ -15,8 +15,7 @@ function MintToken() {
     const [returnedString, setReturnedString] = useState('');
 
     async function connectWallet() {
-        const web3Provider = await web3ModalPolygon.connect();
-        provider = new ethers.providers.Web3Provider(web3Provider);
+        provider = new ethers.BrowserProvider(window.ethereum)
         const network = await provider.getNetwork();
         if (network.chainId !== 31337) {
             throw new Error('Please connect to the correct network (id: 31337)');

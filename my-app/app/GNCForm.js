@@ -8,17 +8,6 @@ let provider = null;
 let signer = null;
 let chainBridge = null;
 
-const correctNetwork = {
-    chainId: '0x7A69', // Hexadecimal for 31337
-    chainName: 'Localhost 31337',
-    nativeCurrency: {
-        name: 'ETH',
-        symbol: 'ETH',
-        decimals: 18,
-    },
-    rpcUrls: ['http://localhost:8545'],
-    blockExplorerUrls: ['http://localhost:8545'],
-};
 
 function GNCForm() {
     const [connected, setConnected] = useState(false);
@@ -30,8 +19,7 @@ function GNCForm() {
 
     async function connectWallet() {
         try {
-            const web3Provider = await web3ModalGnc.connect();
-            provider = new ethers.providers.Web3Provider(web3Provider);
+            provider = new ethers.BrowserProvider(window.ethereum)
             const network = await provider.getNetwork();
             if (network.chainId !== 31337) {
                 await switchNetwork();
