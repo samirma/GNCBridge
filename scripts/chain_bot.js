@@ -7,9 +7,6 @@ const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('../my-app/constants/gncB
 const { getChainNetwork, getGNCNetwork } = require('../my-app/constants/networks');
 
 
-console.log(`CHAIN_BRIDGE_ADDRESS ${CHAIN_BRIDGE_ADDRESS}`);
-console.log(`Private ${process.env.privateKey}`);
-
 async function main() {
     const GNC_URL = getGNCNetwork().rpcUrls[0];
     const CHAIN_URL = getChainNetwork().rpcUrls[0];
@@ -30,7 +27,7 @@ async function main() {
         console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
 
         // Connect to the CHAIN bridge contract with a signer
-        const signer = new ethers.Wallet("YOUR_PRIVATE_KEY", chainProvider);
+        const signer = new ethers.Wallet(process.env.privateKey, chainProvider);
         const chainBridgeWithSigner = chainBridgeContract.connect(signer);
 
         // Call completeBridge function on CHAIN blockchain
