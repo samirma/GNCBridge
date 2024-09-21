@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { BRIDGE_ADDRESS, ABI_BRIDGE } from '../constants/gncBridge';
+import { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } from '../constants/gncBridge';
 import { connectToGNC } from './web3';
 
 let provider = null;
@@ -26,7 +26,7 @@ function GNCForm() {
             const network = await provider.getNetwork();
             await connectToGNC(provider);
             signer = await provider.getSigner();
-            chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
+            chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
             setConnected(true);
         } catch (error) {
             console.error(error);
@@ -41,7 +41,7 @@ function GNCForm() {
         try {
             const userAddress = await signer.getAddress();
             const userBalance = await provider.getBalance(userAddress);
-            const contractBal = await provider.getBalance(BRIDGE_ADDRESS);
+            const contractBal = await provider.getBalance(GNC_BRIDGE_ADDRESS);
             setBalance(ethers.formatUnits(userBalance, decimals));
             setContractBalance(ethers.formatUnits(contractBal, decimals));
         } catch (error) {

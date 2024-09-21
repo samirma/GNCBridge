@@ -22,8 +22,9 @@ async function main() {
 
   fs.writeFileSync(
     path.join(contractsDir, 'chainBridge.js'),
-    `export const BRIDGE_ADDRESS = "${chainBridge.target}";\n` +
-    `export const ABI_BRIDGE = ${JSON.stringify(chainBridge.interface.format('json'), null, 2)};\n`
+    `export const CHAIN_BRIDGE_ADDRESS = "${chainBridge.target}";\n` +
+    `export const CHAIN_ABI_BRIDGE = ${JSON.stringify(chainBridge.interface.format('json'), null, 2)};\n` 
+
   );
 }
 

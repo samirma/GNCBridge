@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { BRIDGE_ADDRESS, ABI_BRIDGE } from '../constants/chainBridge';
+import { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } from '../constants/chainBridge';
 import { TOKEN_ADDRESS, TOKEN_ABI } from '../constants/token';
 import { connectToChain } from './web3';
 
@@ -31,7 +31,7 @@ function ChainForm() {
             const network = await provider.getNetwork();
             await connectToChain(provider);
             signer = await provider.getSigner();
-            chainBridge = new ethers.Contract(BRIDGE_ADDRESS, ABI_BRIDGE, signer);
+            chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
             token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
             const tokenDecimals = await token.decimals();
             setDecimals(tokenDecimals);
@@ -51,10 +51,10 @@ function ChainForm() {
             const balance = await token.balanceOf(await signer.getAddress());
             setBalance(ethers.formatUnits(balance, decimals));
 
-            const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
+            const contractBalance = await token.balanceOf(CHAIN_BRIDGE_ADDRESS);
             setContractBalance(ethers.formatUnits(contractBalance, decimals));
 
-            const allowance = await token.allowance(await signer.getAddress(), BRIDGE_ADDRESS);
+            const allowance = await token.allowance(await signer.getAddress(), CHAIN_BRIDGE_ADDRESS);
             if (allowance > 0) {
                 setIsApproved(true);
                 setTransactionStatus('Token is already approved');

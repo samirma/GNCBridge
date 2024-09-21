@@ -19,8 +19,8 @@ async function main() {
 
   fs.writeFileSync(
     path.join(contractsDir, 'gncBridge.js'),
-    `export const BRIDGE_ADDRESS = "${lock.target}";\n` +
-    `export const ABI_BRIDGE = ${JSON.stringify(lock.interface.format('json'), null, 2)};\n`
+    `export const GNC_BRIDGE_ADDRESS = "${lock.target}";\n` +
+    `export const GNC_ABI_BRIDGE = ${JSON.stringify(lock.interface.format('json'), null, 2)};\n`
   );
 
 }
