@@ -3,6 +3,7 @@ require("dotenv").config({ path: ".env" });
 
 const { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } = require('../my-app/constants/chainBridge');
 const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('../my-app/constants/gncBridge');
+const { TOKEN_ADDRESS, TOKEN_ABI } = require('../my-app/constants/token');
 
 const { getChainNetwork, getGNCNetwork } = require('../my-app/constants/networks');
 
@@ -31,9 +32,9 @@ async function main() {
         const chainBridgeWithSigner = chainBridgeContract.connect(signer);
 
         // Call completeBridge function on CHAIN blockchain
-        const tokenAddress = "YOUR_TOKEN_ADDRESS";
-        await chainBridgeWithSigner.completeBridge(tokenAddress, by, amount);
-        console.log(`completeBridge called on CHAIN blockchain for ${by} with amount ${amount.toString()}`);
+        const tokenAddress = TOKEN_ADDRESS;
+        await chainBridgeWithSigner.transferToken(tokenAddress, by, amount);
+        console.log(`transferToken called on CHAIN blockchain for ${by} with amount ${amount.toString()}`);
     });
 }
 
