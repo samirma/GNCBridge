@@ -1,4 +1,4 @@
-export const CHAIN_BRIDGE_ADDRESS = "0xa17507ABa39E3934A0727E9156Fdc5B02e25ae9E";
+export const CHAIN_BRIDGE_ADDRESS = "0xF94d9aEbF7F1bAB6e2eFA0C4D0aaA7766beF1c4D";
 export const CHAIN_ABI_BRIDGE = [
   "constructor(address)",
   "error OwnableInvalidOwner(address)",

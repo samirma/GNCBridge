@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { getChainNetwork, getGNCNetwork } from '../constants/networks';
+import { getNetworkConfig } from 'shared/constants/networks';
+import { GNC, CHAIN } from 'shared/constants/env';
 
 
 export default function Env() {
 
-    const [gnc, setConnected] = useState("");
+    const [gnc, setGnc] = useState("");
     const [chain, setChain] = useState("");
 
     useEffect(() => {
-        setConnected(getGNCNetwork().chainName);
-        setChain(getChainNetwork().chainName);
+        setGnc(getNetworkConfig(GNC).chainName);
+        setChain(getNetworkConfig(CHAIN).chainName);
     }, []);
 
     return (

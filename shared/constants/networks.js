@@ -1,4 +1,3 @@
-import { GNC, CHAIN } from './envConfig';
 
 const networks = {
   'local': {
@@ -51,15 +50,6 @@ const networks = {
   }
 };
 
-function getNetworkConfig(networkName) {
+export function getNetworkConfig(networkName) {
   return networks[networkName];
 };
-
-export function getChainNetwork() {
-  return getNetworkConfig(CHAIN);
-};
-
-export function getGNCNetwork() {
-    return getNetworkConfig(GNC);
-};
-

@@ -85,13 +85,17 @@ function GNCForm() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div
+            >Loading...
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>;
     }
 
     if (!connected) {
         return (
             <div>
                 <button className="button" onClick={connectWallet}>Connect Wallet</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
         );
     }

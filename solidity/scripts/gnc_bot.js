@@ -1,21 +1,24 @@
 const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
 
-const { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } = require('../my-app/constants/chainBridge');
-const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('../my-app/constants/gncBridge');
-const { TOKEN_ADDRESS, TOKEN_ABI } = require('../my-app/constants/token');
+const { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } = require('shared/constants/chainBridge');
+const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('shared/constants/gncBridge');
+const { TOKEN_ADDRESS, TOKEN_ABI } = require('shared/constants/token');
+const { GNC, CHAIN } = require('shared/constants/env');
 
-const { getChainNetwork, getGNCNetwork } = require('../my-app/constants/networks');
+const { getNetworkConfig } = require('shared/constants/networks');
 
+const GNC_URL = getNetworkConfig(GNC).rpcUrls[0];
+const CHAIN_URL = getNetworkConfig(CHAIN).rpcUrls[0];
 
 async function main() {
-    const GNC_URL = getGNCNetwork().rpcUrls[0];
-    const CHAIN_URL = getChainNetwork().rpcUrls[0];
-
+    
     // Provider for GNC blockchain
-    const gncProvider = new ethers.providers.JsonRpcProvider(GNC_URL);
+    console.log(`Creating GNC provider to url: ` + GNC_URL);
+    const gncProvider = new ethers.JsonRpcProvider(GNC_URL);
     // Provider for CHAIN blockchain
-    const chainProvider = new ethers.providers.JsonRpcProvider(CHAIN_URL);
+    console.log(`Creating chain provider to url: ` + CHAIN_URL);
+    const chainProvider = new ethers.JsonRpcProvider(CHAIN_URL);
 
     // Contract instance for GNC bridge contract
     const gncBridgeContract = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, gncProvider);
@@ -23,7 +26,7 @@ async function main() {
     // Contract instance for CHAIN bridge contract
     const chainBridgeContract = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, chainProvider);
 
-    console.log(`Listen for Deposit events on GNC blockchain`);
+    console.log(`Waiting for Deposit events on GNC blockchain`);
     chainBridgeContract.on("Deposit", async (by, amount) => {
         console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
 

@@ -1,4 +1,5 @@
-import { getChainNetwork, getGNCNetwork } from '../constants/networks';
+import { getNetworkConfig } from 'shared/constants/networks';
+import { GNC, CHAIN } from 'shared/constants/env';
 
 async function switchNetwork(provider, network) {
     try {
@@ -17,9 +18,9 @@ async function connectToNetwork(provider, getNetworkFunction) {
 }
 
 export async function connectToChain(provider) {
-    await connectToNetwork(provider, getChainNetwork);
+    await connectToNetwork(provider, () => getNetworkConfig(CHAIN));
 }
 
 export async function connectToGNC(provider) {
-    await connectToNetwork(provider, getGNCNetwork);
+    await connectToNetwork(provider, () => getNetworkConfig(GNC));
 }

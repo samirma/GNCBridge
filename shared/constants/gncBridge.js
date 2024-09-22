@@ -1,4 +1,4 @@
-export const GNC_BRIDGE_ADDRESS = "0xfBCF0D011B6097B0b2d78bf13D0038Cca6275Eb3";
+export const GNC_BRIDGE_ADDRESS = "0xFAeC51FA247019EA0100844dAF6a8D704884f55A";
 export const GNC_ABI_BRIDGE = [
   "constructor(address)",
   "error OwnableInvalidOwner(address)",
