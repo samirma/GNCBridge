@@ -57,7 +57,7 @@ function ChainForm() {
             const allowance = await token.allowance(await signer.getAddress(), CHAIN_BRIDGE_ADDRESS);
             if (allowance > 0) {
                 setIsApproved(true);
-                setTransactionStatus('Token is already approved');
+                setTransactionStatus('');
             } else {
                 setIsApproved(false);
                 setTransactionStatus('Token is not approved');

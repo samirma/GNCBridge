@@ -26,7 +26,7 @@ async function main() {
     // Contract instance for CHAIN bridge contract
     const chainBridgeContract = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, chainProvider);
 
-    console.log(`Waiting for Deposit events on CHAIN blockchain`);
+    console.log(`Waiting for Deposit events on GNC blockchain`);
     gncBridgeContract.on("Deposit", async (by, amount) => {
         console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
 

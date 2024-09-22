@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { TOKEN_ADDRESS, TOKEN_ABI } from 'shared/constants/token';
+import { connectToGNC } from './web3';
 
 let provider = null;
 let signer = null;
@@ -15,14 +16,10 @@ function MintToken() {
     const [returnedString, setReturnedString] = useState('');
 
     async function connectWallet() {
-        provider = new ethers.BrowserProvider(window.ethereum)
+        provider = new ethers.BrowserProvider(window.ethereum);
         const network = await provider.getNetwork();
-        if (network.chainId !== 31337) {
-            throw new Error('Please connect to the correct network (id: 31337)');
-        } else {
-            setConnected(true);
-        }
-        signer = provider.getSigner();
+        await connectToGNC(provider);
+        signer = await provider.getSigner();
         tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
     }
 
