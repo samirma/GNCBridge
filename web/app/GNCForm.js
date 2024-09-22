@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } from '../constants/gncBridge';
+import { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } from 'shared/constants/gncBridge';
 import { connectToGNC } from './web3';
 
 let provider = null;

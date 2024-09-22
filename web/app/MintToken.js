@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { TOKEN_ADDRESS, TOKEN_ABI } from '../constants/token';
+import { TOKEN_ADDRESS, TOKEN_ABI } from 'shared/constants/token';
 
 let provider = null;
 let signer = null;

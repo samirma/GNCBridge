@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } from '../constants/chainBridge';
-import { TOKEN_ADDRESS, TOKEN_ABI } from '../constants/token';
+import { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } from 'shared/constants/chainBridge';
+import { TOKEN_ADDRESS, TOKEN_ABI } from 'shared/constants/token';
 import { connectToChain } from './web3';
 
 
@@ -82,7 +82,7 @@ function ChainForm() {
         try {
             setTransactionStatus('Approving token transfer...');
             const maxUint256 = ethers.MaxUint256;
-            const approveTx = await token.approve(BRIDGE_ADDRESS, maxUint256);
+            const approveTx = await token.approve(CHAIN_BRIDGE_ADDRESS, maxUint256);
             await approveTx.wait();
             setIsApproved(true);
             setTransactionStatus('Approved');
@@ -104,7 +104,7 @@ function ChainForm() {
             await transferTx.wait();
 
             const balance = await token.balanceOf(await signer.getAddress());
-            const contractBalance = await token.balanceOf(BRIDGE_ADDRESS);
+            const contractBalance = await token.balanceOf(CHAIN_BRIDGE_ADDRESS);
             setBalance(ethers.formatUnits(balance, decimals));
             setContractBalance(ethers.formatUnits(contractBalance, decimals));
             setTransactionStatus('Transfer successful!');
