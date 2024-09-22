@@ -4,8 +4,13 @@ const path = require('path');
 
 async function main() {
   
-  let addressWallet = "0x125089C0403C4Cd3a01c18e6FE1D46Ab9bB34344";
-  const lock = await hre.ethers.deployContract("GncBridge", [addressWallet]);
+  const [deployer] = await hre.ethers.getSigners();
+
+  console.log(
+      "Deploying contracts with the account:",
+      deployer.address
+  );
+  const lock = await hre.ethers.deployContract("GncBridge", [deployer.address]);
 
   await lock.waitForDeployment();
 

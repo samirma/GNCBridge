@@ -4,10 +4,15 @@ const path = require('path');
 
 async function main() {
 
-  let addressWallet = "0x125089C0403C4Cd3a01c18e6FE1D46Ab9bB34344"
+  const [deployer] = await hre.ethers.getSigners();
+
+  console.log(
+      "Deploying contracts with the account:",
+      deployer.address
+  );
 
   const ChainBridge = await hre.ethers.getContractFactory("ChainBridge");
-  const chainBridge = await ChainBridge.deploy(addressWallet);
+  const chainBridge = await ChainBridge.deploy(deployer.address);
 
   //const tokenAddress = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
   //await chainBridge.setToken(tokenAddress);
