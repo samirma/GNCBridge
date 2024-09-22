@@ -11,7 +11,7 @@ async function main() {
 
   console.log(`GncBridge deployed to ${lock.target}`  );
 
-  const contractsDir = path.join(__dirname, '..', 'my-app', 'constants');
+  const contractsDir = path.join(__dirname, '..', '..', 'shared', 'constants');
   
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);

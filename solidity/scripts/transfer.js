@@ -4,8 +4,7 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers");
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
 
-    let addressWallet = "0x125089C0403C4Cd3a01c18e6FE1D46Ab9bB34344"
-    let addressDeployer = deployer.address
+    let addressWallet = deployer.address
 
     let address = addressWallet
 

@@ -14,7 +14,7 @@ async function main() {
 
   console.log(`ChainBridge deployed to ${chainBridge.target}`);
 
-  const contractsDir = path.join(__dirname, '..', 'my-app', 'constants');
+  const contractsDir = path.join(__dirname, '..', '..', 'shared', 'constants');
   
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
