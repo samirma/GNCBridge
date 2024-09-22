@@ -23,11 +23,12 @@ function GNCForm() {
         setLoading(true);
         try {
             provider = new ethers.BrowserProvider(window.ethereum);
-            const network = await provider.getNetwork();
             await connectToGNC(provider);
             signer = await provider.getSigner();
             chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
             setConnected(true);
+            const network = await provider.getNetwork();
+            setTransactionStatus('Connected to ' + network.name + ` ` + network.chainId);
         } catch (error) {
             console.error(error);
             setError("Fail on connectWallet" + error.message);

@@ -1,30 +1,49 @@
 
 const networks = {
-  'local': {
-      chainId: '0x7A69', // Hexadecimal for 31337
-      chainName: 'Localhost 31337',
-      nativeCurrency: {
-          name: 'ETH',
-          symbol: 'ETH',
-          decimals: 18,
+    'local1': {
+        "chainId": "0xfa",
+        "chainName": "local1",
+        "rpcUrls": ["https://rpcapi.fantom.network"],
+        "nativeCurrency": {
+          "name": "Fantom",
+          "symbol": "FTM",
+          "decimals": 18
+        },
+        "blockExplorerUrls": ["https://ftmscan.com"]
+    },
+    'local2': {
+        "chainId": "0xa86a",
+        "chainName": "local2",
+        "rpcUrls": ["https://api.avax.network/ext/bc/C/rpc"],
+        "nativeCurrency": {
+        "name": "Avalanche",
+        "symbol": "AVAX",
+        "decimals": 18
+        },
+        "blockExplorerUrls": ["https://snowtrace.io"]
+    },
+    'polygon': {
+        "chainId": "0x89",
+        "chainName": "Polygon",
+        "rpcUrls": ["https://rpc-mainnet.maticvigil.com/"],
+        "nativeCurrency": {
+          "name": "Matic",
+          "symbol": "MATIC",
+          "decimals": 18
+        },
+        "blockExplorerUrls": ["https://polygonscan.com"]
       },
-      rpcUrls: ['http://localhost:8545'],
-      blockExplorerUrls: ['http://localhost:8545'],
-  },
-  'polygon': {
-      chainId: "0x89",
-      chainName: "Polygon",
-      nativeCurrency: {
-          name: "Matic",
-          symbol: "MATIC",
-          decimals: 18
-      },
-      rpcUrls: [
-          "https://polygon-mainnet.infura.io/v3/42562fc1754d4557a37d54da6d89a313"
-      ],
-      blockExplorerUrls: [
-          "https://polygonscan.com/"
-      ]
+
+    'avalanche': {
+        "chainId": "0xa86a",
+        "chainName": "Avalanche",
+        "rpcUrls": ["https://api.avax.network/ext/bc/C/rpc"],
+        "nativeCurrency": {
+        "name": "Avalanche",
+        "symbol": "AVAX",
+        "decimals": 18
+        },
+        "blockExplorerUrls": ["https://snowtrace.io"]
   },
   'gnc_main': {
       chainId: '0x7A69', 
@@ -34,19 +53,18 @@ const networks = {
           symbol: 'ETH',
           decimals: 18,
       },
-      rpcUrls: ['http://35.208.144.105:8545'],
-      blockExplorerUrls: ['http://localhost:8545'],
+      rpcUrls: ['http://35.208.144.105:8545']
   },
   'fantom': {
-      chainId: '0xFA',
-      blockExplorerUrls: ['https://ftmscan.com'],
-      chainName: 'Fantom Opera',
-      rpcUrls: ['https://rpc.ftm.tools'],
-      nativeCurrency: {
-          name: 'Fantom',
-          symbol: 'FTM',
-          decimals: 18
-      }
+    "chainId": "0xfa",
+    "chainName": "Fantom",
+    "rpcUrls": ["https://rpcapi.fantom.network"],
+    "nativeCurrency": {
+      "name": "Fantom",
+      "symbol": "FTM",
+      "decimals": 18
+    },
+    "blockExplorerUrls": ["https://ftmscan.com"]
   }
 };
 

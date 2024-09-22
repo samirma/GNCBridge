@@ -4,8 +4,12 @@ require("dotenv").config({ path: ".env" });
 
 module.exports = {
   networks: {
-    local: {
+    local1: {
       url: `http://127.0.0.1:8545/`,
+      accounts: [process.env.privateKey],
+    },
+    local2: {
+      url: `http://127.0.0.1:8546/`,
       accounts: [process.env.privateKey],
     },
     aurora: {

@@ -27,8 +27,7 @@ function ChainForm() {
         setLoading(true);
         setError('');
         try {
-            provider = new ethers.BrowserProvider(window.ethereum)
-            const network = await provider.getNetwork();
+            provider = new ethers.BrowserProvider(window.ethereum);
             await connectToChain(provider);
             signer = await provider.getSigner();
             chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
@@ -36,6 +35,8 @@ function ChainForm() {
             const tokenDecimals = await token.decimals();
             setDecimals(tokenDecimals);
             setConnected(true);
+            const network = await provider.getNetwork();
+            setTransactionStatus('Connected to ' + network.name + ` ` + network.chainId);
         } catch (error) {
             console.error(error);
             setError("Fail on connectWallet" + error.message);
