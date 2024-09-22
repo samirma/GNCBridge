@@ -30,11 +30,8 @@ contract ChainBridge is Ownable {
         IERC20 token = IERC20(_token);
         require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
 
-        uint256 balanceBeforeTransfer = token.balanceOf(_to);
-
         token.transfer(_to, _amount);
 
-        uint256 balanceAfterTransfer = token.balanceOf(_to);
         emit TransferCompleted(_to, _amount);
     }
 }
