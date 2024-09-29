@@ -4,6 +4,9 @@ require("dotenv").config({ path: ".env" });
 
 module.exports = {
   networks: {
+    hardhat: {
+      chainId: Number(process.env.HARDHAT_CHAIN_ID),
+    },
     local1: {
       url: `http://127.0.0.1:8545/`,
       accounts: [process.env.privateKey],

@@ -5,11 +5,11 @@ npm install
 ```
 
 ```shell
-#Run local chain
-npx hardhat node --fork https://rpc.ftm.tools/
+#Run local1 chain
+HARDHAT_CHAIN_ID=0xfa npx hardhat node --fork https://rpc.ftm.tools/
 
-#Run local gnc 
-npx hardhat node --fork https://polygon-mainnet.infura.io/v3/42562fc1754d4557a37d54da6d89a313  --port 8546
+#Run local2 gnc 
+HARDHAT_CHAIN_ID=0xa86a npx hardhat node --fork https://api.avax.network/ext/bc/C/rpc  --port 8546
 ```
 
 
