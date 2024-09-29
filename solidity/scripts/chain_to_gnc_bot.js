@@ -27,18 +27,22 @@ async function main() {
 
     console.log(`Waiting for Deposit events on GNC blockchain`);
     chainBridgeContract.on("Deposit", async (by, amount) => {
-        console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
+        try {
+            console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
 
-        // Connect to the CHAIN bridge contract with a signer
-        const signer = new ethers.Wallet(process.env.privateKey, gncProvider);
+            // Connect to the CHAIN bridge contract with a signer
+            const signer = new ethers.Wallet(process.env.privateKey, gncProvider);
 
-        // Transfer the amount from the wallet to the `by` address
-        const tx = await signer.sendTransaction({
-            to: by,
-            value: amount
-        });
-        await tx.wait();
-        console.log(`Transferred ${amount.toString()} to ${by}`);
+            // Transfer the amount from the wallet to the `by` address
+            const tx = await signer.sendTransaction({
+                to: by,
+                value: amount
+            });
+            await tx.wait();
+            console.log(`Transferred ${amount.toString()} to ${by}`);
+        } catch (error) {
+            console.error(`Error handling Deposit event: ${error}`);
+        }
     });
 }
 
