@@ -23,18 +23,36 @@ function ChainForm() {
     const [isApproved, setIsApproved] = useState(false);
     const [error, setError] = useState('');
 
+    const handleConnect = async () => {
+        function onConnected(isConnected) {
+            console.log('Connected:', isConnected);
+            setConnected(isConnected);
+          };
+          
+          function onLoading (isLoading) {
+            console.log('Loading:', isLoading);
+            setLoading(isLoading);
+          };
+          
+          function onError (errorMessage) {
+            console.error('Error:', errorMessage);
+            setError(errorMessage);
+          };
+
+        await connectToChain(onConnected, onLoading, onError);
+    };
+
     async function connectWallet() {
         setLoading(true);
         setError('');
         try {
             provider = new ethers.BrowserProvider(window.ethereum);
-            await connectToChain(provider);
+            handleConnect();
             signer = await provider.getSigner();
             chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
             token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
             const tokenDecimals = await token.decimals();
             setDecimals(tokenDecimals);
-            setConnected(true);
             const network = await provider.getNetwork();
             setTransactionStatus('Connected to ' + network.name + ` ` + network.chainId);
         } catch (error) {
@@ -65,7 +83,7 @@ function ChainForm() {
             }
         } catch (error) {
             console.error(error);
-            setError("Fail on fetchBalance: " + error.message);
+            setError("Fail on fetchBalance: " + "  " + error.message);
         } finally {
             setLoading(false);
         }
@@ -142,6 +160,8 @@ function ChainForm() {
             <h1>Chain Bridge</h1>
             <p>Contract balance: {contractBalance}</p>
             <p>Balance: {balance}</p>
+            <p>Token Contract Address: {TOKEN_ADDRESS}</p>
+            <p>Bridge Contract Address: {CHAIN_BRIDGE_ADDRESS}</p>
             <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} />
             {!isApproved && <button className="button" onClick={handleApprove}>Approve</button>}
             {isApproved && <button className="button" disabled={!isValidAmount(amount)} onClick={handleTransfer}>Send to GNC</button>}

@@ -19,11 +19,30 @@ function GNCForm() {
     const [decimals, setDecimals] = useState(18); // Default to 18 decimals
     const [error, setError] = useState('');
 
+    const handleConnect = async () => {
+        function onConnected(isConnected) {
+            console.log('Connected:', isConnected);
+            setConnected(isConnected);
+          };
+          
+          function onLoading (isLoading) {
+            console.log('Loading:', isLoading);
+            setLoading(isLoading);
+          };
+          
+          function onError (errorMessage) {
+            console.error('Error:', errorMessage);
+            setError(errorMessage);
+          };
+
+        await connectToGNC(onConnected, onLoading, onError);
+    };
+
     async function connectWallet() {
         setLoading(true);
         try {
             provider = new ethers.BrowserProvider(window.ethereum);
-            await connectToGNC(provider);
+            await handleConnect();
             signer = await provider.getSigner();
             chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
             setConnected(true);
@@ -65,7 +84,6 @@ function GNCForm() {
         setLoading(true);
         setError('');
         try {
-            await connectWallet();
             setTransactionStatus('Initiating deposit...');
             const amountToDeposit = ethers.parseUnits(amount, decimals);
             const depositTx = await chainBridge.deposit(amountToDeposit, { value: amountToDeposit });
