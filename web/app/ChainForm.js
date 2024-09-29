@@ -74,6 +74,8 @@ function ChainForm() {
     useEffect(() => {
         if (connected) {
             fetchBalance();
+        } else {
+            connectWallet();
         }
     }, [connected]);
 

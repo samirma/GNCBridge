@@ -1,4 +1,4 @@
-export const TOKEN_ADDRESS = "0xF94d9aEbF7F1bAB6e2eFA0C4D0aaA7766beF1c4D";
+export const TOKEN_ADDRESS = "0x1F2c819363Ae285F8CC93D4E62A7969999d25c06";
 export const TOKEN_ABI = [
   "constructor(address)",
   "error ERC20InsufficientAllowance(address,uint256,uint256)",

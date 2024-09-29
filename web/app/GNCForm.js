@@ -56,6 +56,8 @@ function GNCForm() {
     useEffect(() => {
         if (connected) {
             fetchBalance();
+        } else {
+            connectWallet();
         }
     }, [connected]);
 

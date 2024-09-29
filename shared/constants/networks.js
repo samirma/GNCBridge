@@ -3,7 +3,7 @@ const networks = {
     'local1': {
         "chainId": "0xfa",
         "chainName": "local1",
-        "rpcUrls": ["https://rpcapi.fantom.network"],
+        "rpcUrls": ["http://localhost:8545"],
         "nativeCurrency": {
           "name": "Fantom",
           "symbol": "FTM",
@@ -14,7 +14,7 @@ const networks = {
     'local2': {
         "chainId": "0xa86a",
         "chainName": "local2",
-        "rpcUrls": ["https://api.avax.network/ext/bc/C/rpc"],
+        "rpcUrls": ["http://localhost:8546"],
         "nativeCurrency": {
         "name": "Avalanche",
         "symbol": "AVAX",
