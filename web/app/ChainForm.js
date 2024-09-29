@@ -6,11 +6,10 @@ import { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } from 'shared/constants/chainBr
 import { TOKEN_ADDRESS, TOKEN_ABI } from 'shared/constants/token';
 import { connectToChain } from './web3';
 
-
-let provider = null;
-let signer = null;
-let chainBridge = null;
-let token = null;
+let provider = new ethers.BrowserProvider(window.ethereum);
+let signer = await provider.getSigner();
+let chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
+let token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
 
 function ChainForm() {
     const [connected, setConnected] = useState(false);
@@ -46,15 +45,7 @@ function ChainForm() {
         setLoading(true);
         setError('');
         try {
-            provider = new ethers.BrowserProvider(window.ethereum);
             handleConnect();
-            signer = await provider.getSigner();
-            chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
-            token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
-            const tokenDecimals = await token.decimals();
-            setDecimals(tokenDecimals);
-            const network = await provider.getNetwork();
-            setTransactionStatus('Connected to ' + network.name + ` ` + network.chainId);
         } catch (error) {
             console.error(error);
             setError("Fail on connectWallet" + error.message);
@@ -67,6 +58,9 @@ function ChainForm() {
         setLoading(true);
         setError('');
         try {
+            const tokenDecimals = await token.decimals();
+            setDecimals(tokenDecimals);
+
             const balance = await token.balanceOf(await signer.getAddress());
             setBalance(ethers.formatUnits(balance, decimals));
 
@@ -160,7 +154,7 @@ function ChainForm() {
             <h1>Chain Bridge</h1>
             <p>Contract balance: {contractBalance}</p>
             <p>Balance: {balance}</p>
-            <p>Token Contract Address: {TOKEN_ADDRESS}</p>
+            <p>Token Contract Address: {TOKEN_ADDRESS} decimals: {decimals}</p>
             <p>Bridge Contract Address: {CHAIN_BRIDGE_ADDRESS}</p>
             <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} />
             {!isApproved && <button className="button" onClick={handleApprove}>Approve</button>}

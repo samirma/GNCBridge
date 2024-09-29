@@ -40,11 +40,12 @@ const connectToNetwork = async (networkConfig, onConnected, onLoading, onError) 
       await switchNetwork(networkConfig);
     }
     onConnected(true);
+    onError('');
   } catch (error) {
     onError(error.message);
     onConnected(false);
   } finally {
-    //onLoading(false);
+    onLoading(false);
   }
 };
 

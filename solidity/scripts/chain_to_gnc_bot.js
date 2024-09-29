@@ -30,8 +30,7 @@ async function main() {
         console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
 
         // Connect to the CHAIN bridge contract with a signer
-        const signer = new ethers.Wallet(process.env.privateKey, chainProvider);
-        const gncBridgeContract = chainBridgeContract.connect(signer);
+        const signer = new ethers.Wallet(process.env.privateKey, gncProvider);
 
         // Transfer the amount from the wallet to the `by` address
         const tx = await signer.sendTransaction({

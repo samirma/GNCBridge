@@ -24,11 +24,11 @@ export default function App() {
     <div>
         <nav>
             <ul>
-                <li><a onClick={() => setState('home')}> Home</a></li>
-                <li><a onClick={() => setState('chain')}> Chain to GNC: {chain} </a></li>
-                <li><a onClick={() => setState('gnc')}> GNC to GNC: {gnc} </a></li>
-                <li><a onClick={() => setState('MintToken')}> Mint </a></li>
-                <li><a onClick={() => setState('about')}> About </a></li>
+                <li><a className={state === 'home' ? 'active' : ''} onClick={() => setState('home')}> Home</a></li>
+                <li><a className={state === 'chain' ? 'active' : ''} onClick={() => setState('chain')}> Chain to GNC: {chain} </a></li>
+                <li><a className={state === 'gnc' ? 'active' : ''} onClick={() => setState('gnc')}> GNC to GNC: {gnc} </a></li>
+                <li><a className={state === 'MintToken' ? 'active' : ''} onClick={() => setState('MintToken')}> Mint </a></li>
+                <li><a className={state === 'about' ? 'active' : ''} onClick={() => setState('about')}> About </a></li>
             </ul>
         </nav>
 

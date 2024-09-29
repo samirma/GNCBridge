@@ -5,9 +5,9 @@ import { ethers } from 'ethers';
 import { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } from 'shared/constants/gncBridge';
 import { connectToGNC } from './web3';
 
-let provider = null;
-let signer = null;
-let chainBridge = null;
+let provider = new ethers.BrowserProvider(window.ethereum);
+let signer = await provider.getSigner();
+let chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
 
 function GNCForm() {
     const [connected, setConnected] = useState(false);
@@ -41,13 +41,7 @@ function GNCForm() {
     async function connectWallet() {
         setLoading(true);
         try {
-            provider = new ethers.BrowserProvider(window.ethereum);
             await handleConnect();
-            signer = await provider.getSigner();
-            chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
-            setConnected(true);
-            const network = await provider.getNetwork();
-            setTransactionStatus('Connected to ' + network.name + ` ` + network.chainId);
         } catch (error) {
             console.error(error);
             setError("Fail on connectWallet" + error.message);

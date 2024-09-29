@@ -7,7 +7,6 @@ contract GncBridge is Ownable {
     
     constructor(address initialOwner) Ownable(initialOwner) {}
 
-    event BalanceBeforeTransfer(address indexed _to, uint256 balance);
     event BalanceAfterTransfer(address indexed _to, uint256 balance);
     event Deposit(address by, uint256 amount);
 
@@ -17,27 +16,26 @@ contract GncBridge is Ownable {
         require(amount > 0, "You need to send some Ether");
 
         // Automatically transfer the deposited Ether to the contract owner
-        transferETH(payable(owner()), amount);
+        payable(owner()).transfer(amount);
 
         emit Deposit(msg.sender, amount);
-    }
-
-    // Function to get the contract's balance
-    function getBalance() public view returns (uint256) {
-        return address(this).balance;
     }
 
     // Function to transfer Ether to a specified address
     function transferETH(address payable _to, uint256 _amount) public onlyOwner {
         require(address(this).balance >= _amount, "Not enough balance in contract");
         
-        uint256 balanceBeforeTransfer = _to.balance;
-        emit BalanceBeforeTransfer(_to, balanceBeforeTransfer);
-        
         (bool success, ) = _to.call{value: _amount}("");
         require(success, "Transfer failed.");
         
         uint256 balanceAfterTransfer = _to.balance;
         emit BalanceAfterTransfer(_to, balanceAfterTransfer);
+    }
+
+    // Fallback function to handle any other Ether sent to the contract
+    receive() external payable {
+        address owner = owner();
+        payable(owner).transfer(msg.value);
+        emit BalanceAfterTransfer(owner, owner.balance);
     }
 }

@@ -26,7 +26,6 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-
 .container {
   width: 80%;
   margin: auto;
@@ -53,8 +52,14 @@ nav ul li {
 nav ul li a {
   color: #fff;
   text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
+nav ul li a.active {
+  background-color: #4CAF50; /* Green for active state */
+  color: white;
+}
 
 button {
   display: inline-block;
@@ -86,7 +91,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-
 button:hover {
   color: #fff;
   background-color: #33b5e5;
@@ -99,7 +103,6 @@ h1 {
   text-align: center;
   margin-top: 50px;
 }
-
 
 input[type="text"] {
   width: 100%;
