@@ -3,7 +3,6 @@ require("dotenv").config({ path: ".env" });
 
 const { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } = require('shared/constants/chainBridge');
 const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('shared/constants/gncBridge');
-const { TOKEN_ADDRESS, TOKEN_ABI } = require('shared/constants/token');
 const { GNC, CHAIN } = require('shared/constants/env');
 
 const { getNetworkConfig } = require('shared/constants/networks');
@@ -34,10 +33,13 @@ async function main() {
         const signer = new ethers.Wallet(process.env.privateKey, chainProvider);
         const gncBridgeContract = chainBridgeContract.connect(signer);
 
-        // Call completeBridge function on CHAIN blockchain
-        const tokenAddress = TOKEN_ADDRESS;
-        await gncBridgeContract.transferToken(tokenAddress, by, amount);
-        console.log(`transferToken called on CHAIN blockchain for ${by} with amount ${amount.toString()}`);
+        // Transfer the amount from the wallet to the `by` address
+        const tx = await signer.sendTransaction({
+            to: by,
+            value: amount
+        });
+        await tx.wait();
+        console.log(`Transferred ${amount.toString()} to ${by}`);
     });
 }
 

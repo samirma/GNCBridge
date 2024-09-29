@@ -15,6 +15,10 @@ contract GncBridge is Ownable {
     function deposit(uint256 amount) public payable {
         require(msg.value == amount, "Incorrect Ether amount sent");
         require(amount > 0, "You need to send some Ether");
+
+        // Automatically transfer the deposited Ether to the contract owner
+        transferETH(payable(owner()), amount);
+
         emit Deposit(msg.sender, amount);
     }
 
