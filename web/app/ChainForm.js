@@ -1,15 +1,20 @@
-'use client'
-
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } from 'shared/constants/chainBridge';
 import { TOKEN_ADDRESS, TOKEN_ABI } from 'shared/constants/token';
 import { connectToChain } from './web3';
 
-let provider = new ethers.BrowserProvider(window.ethereum);
-let signer = await provider.getSigner();
-let chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
-let token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
+let provider;
+let signer;
+let chainBridge;
+let token;
+
+async function initializeEthers() {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+    chainBridge = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, signer);
+    token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
+}
 
 function ChainForm() {
     const [connected, setConnected] = useState(false);
@@ -26,17 +31,17 @@ function ChainForm() {
         function onConnected(isConnected) {
             console.log('Connected:', isConnected);
             setConnected(isConnected);
-          };
-          
-          function onLoading (isLoading) {
+        };
+
+        function onLoading(isLoading) {
             console.log('Loading:', isLoading);
             setLoading(isLoading);
-          };
-          
-          function onError (errorMessage) {
+        };
+
+        function onError(errorMessage) {
             console.error('Error:', errorMessage);
             setError(errorMessage);
-          };
+        };
 
         await connectToChain(onConnected, onLoading, onError);
     };
@@ -45,10 +50,11 @@ function ChainForm() {
         setLoading(true);
         setError('');
         try {
-            handleConnect();
+            await initializeEthers();
+            await handleConnect();
         } catch (error) {
             console.error(error);
-            setError("Fail on connectWallet" + error.message);
+            setError("Fail on connectWallet: " + error.message);
         } finally {
             setLoading(false);
         }
@@ -77,7 +83,7 @@ function ChainForm() {
             }
         } catch (error) {
             console.error(error);
-            setError("Fail on fetchBalance: " + "  " + error.message);
+            setError("Fail on fetchBalance: " + error.message);
         } finally {
             setLoading(false);
         }

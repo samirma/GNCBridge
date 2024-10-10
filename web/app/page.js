@@ -5,10 +5,8 @@ import GNCForm from './GNCForm';
 import ChainForm from './ChainForm';
 import About from './about';
 import MintToken from './MintToken';
-import Network from './network';
 import { GNC, CHAIN } from 'shared/constants/env';
 import { getNetworkConfig } from 'shared/constants/networks';
-import { handleChainChanged, connectToChain, connectToGNC } from './web3';
 
 export default function App() {
   const [state, setState] = useState("chain");

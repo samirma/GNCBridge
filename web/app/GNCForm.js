@@ -1,13 +1,17 @@
-'use client'
-
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } from 'shared/constants/gncBridge';
 import { connectToGNC } from './web3';
 
-let provider = new ethers.BrowserProvider(window.ethereum);
-let signer = await provider.getSigner();
-let chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
+let provider;
+let signer;
+let chainBridge;
+
+async function initializeEthers() {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+    chainBridge = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, signer);
+}
 
 function GNCForm() {
     const [connected, setConnected] = useState(false);
@@ -23,17 +27,17 @@ function GNCForm() {
         function onConnected(isConnected) {
             console.log('Connected:', isConnected);
             setConnected(isConnected);
-          };
-          
-          function onLoading (isLoading) {
+        };
+
+        function onLoading(isLoading) {
             console.log('Loading:', isLoading);
             setLoading(isLoading);
-          };
-          
-          function onError (errorMessage) {
+        };
+
+        function onError(errorMessage) {
             console.error('Error:', errorMessage);
             setError(errorMessage);
-          };
+        };
 
         await connectToGNC(onConnected, onLoading, onError);
     };
@@ -41,10 +45,11 @@ function GNCForm() {
     async function connectWallet() {
         setLoading(true);
         try {
+            await initializeEthers();
             await handleConnect();
         } catch (error) {
             console.error(error);
-            setError("Fail on connectWallet" + error.message);
+            setError("Fail on connectWallet: " + error.message);
         } finally {
             setLoading(false);
         }
@@ -100,10 +105,7 @@ function GNCForm() {
     };
 
     if (loading) {
-        return <div
-            >Loading...
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>;
+        return <div>Loading... {error && <p style={{ color: 'red' }}>{error}</p>}</div>;
     }
 
     if (!connected) {
