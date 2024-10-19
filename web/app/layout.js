@@ -33,9 +33,9 @@ export default function RootLayout({ children }) {
             <div className="col-md-3"></div>
           </div>
         </div>
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/scripts.js"></script>
+        <script src="js/jquery.min.js" async />
+        <script src="js/bootstrap.min.js" async />
+        <script src="js/scripts.js" async />
       </body>
     </html>
   )
