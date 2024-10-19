@@ -1,0 +1,16 @@
+.network_img img {
+    width: 24px;
+
+    margin: 5px;
+}
+.btn-primary {
+
+    background-color: transparent !important;
+    border-color: #0275d8;
+}
+
+.swap_box_border {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 20px;
+}

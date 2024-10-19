@@ -156,18 +156,20 @@ function ChainForm() {
     }
 
     return (
-        <div>
-            <h1>Chain Bridge</h1>
+        <>
             <p>Contract balance: {contractBalance}</p>
             <p>Balance: {balance}</p>
             <p>Token Contract Address: {TOKEN_ADDRESS} decimals: {decimals}</p>
             <p>Bridge Contract Address: {CHAIN_BRIDGE_ADDRESS}</p>
-            <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} />
-            {!isApproved && <button className="button" onClick={handleApprove}>Approve</button>}
-            {isApproved && <button className="button" disabled={!isValidAmount(amount)} onClick={handleTransfer}>Send to GNC</button>}
+            <div className="form-group">
+                <label htmlFor="amount">Amount</label>
+                <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} id="amount" />
+            </div>
+            {!isApproved && <button type="button" className="btn btn-success" onClick={handleApprove}>Approve</button>}
+            {isApproved && <button type="button" className="btn btn-success" disabled={!isValidAmount(amount)} onClick={handleTransfer}>Send to GNC</button>}
             <p>{transactionStatus}</p>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
+        </>
     );
 }
 

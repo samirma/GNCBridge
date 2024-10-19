@@ -118,12 +118,14 @@ function GNCForm() {
     }
 
     return (
-        <div>
-            <h1>GNC Bridge</h1>
+        <div className="col-md-12">
             <p>Contract balance: {contractBalance}</p>
             <p>Balance: {balance}</p>
-            <input type="text" value={amount} placeholder="Amount to deposit" onChange={e => setAmount(e.target.value)} />
-            <button className="button" disabled={!isValidAmount(amount)} onClick={handleDeposit}>Deposit Ether</button>
+            <div className="form-group">
+                <label htmlFor="amount">Amount</label>
+                <input type="text" value={amount} placeholder="Amount to deposit" onChange={e => setAmount(e.target.value)} id="amount" />
+            </div>
+            <button type="button" className="btn btn-success" disabled={!isValidAmount(amount)} onClick={handleDeposit}>Deposit Ether</button>
             <p>{transactionStatus}</p>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
