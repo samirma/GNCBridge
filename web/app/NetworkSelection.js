@@ -6,22 +6,32 @@ import { GNC, CHAIN } from 'shared/constants/env';
 export default function NetworkSelection({ onNetworkSelect }) {
     const [gnc, setGnc] = useState('');
     const [chain, setChain] = useState('');
-    const networks = [
-        { id: GNC, name: gnc, img: 'img/chain-1.png' },
-        { id: CHAIN, name: chain, img: 'img/chain-137.png' }
-    ];
-    const [selectedOrigin, setSelectedOrigin] = useState(networks[0]);
-    const [selectedTarget, setSelectedTarget] = useState(networks[1]);
+    const [selectedOrigin, setSelectedOrigin] = useState(null);
+    const [selectedTarget, setSelectedTarget] = useState(null);
+    const [networks, setNetworks] = useState([]);
 
     useEffect(() => {
-        setGnc(getNetworkConfig(GNC).chainName);
-        setChain(getNetworkConfig(CHAIN).chainName);
+        const gncName = getNetworkConfig(GNC).chainName;
+        const chainName = getNetworkConfig(CHAIN).chainName;
+        setGnc(gncName);
+        setChain(chainName);
+
+        const updatedNetworks = [
+            { id: GNC, name: gncName, img: 'img/chain-1.png' },
+            { id: CHAIN, name: chainName, img: 'img/chain-137.png' }
+        ];
+        setNetworks(updatedNetworks);
+        setSelectedOrigin(updatedNetworks[0]);
+        setSelectedTarget(updatedNetworks[1]);
     }, []);
 
     const selectNetworkOrigin = (id) => {
         const selectedNetwork = networks.find(network => network.id === id);
         if (selectedNetwork) {
             setSelectedOrigin(selectedNetwork);
+            if (selectedNetwork.id === selectedTarget.id) {
+                setSelectedTarget(networks.find(network => network.id !== id));
+            }
             onNetworkSelect(selectedNetwork);
         }
     };
@@ -30,7 +40,9 @@ export default function NetworkSelection({ onNetworkSelect }) {
         const selectedNetwork = networks.find(network => network.id === id);
         if (selectedNetwork) {
             setSelectedTarget(selectedNetwork);
-            onNetworkSelect(selectedNetwork);
+            if (selectedNetwork.id === selectedOrigin.id) {
+                setSelectedOrigin(networks.find(network => network.id !== id));
+            }
         }
     };
 
@@ -43,11 +55,10 @@ export default function NetworkSelection({ onNetworkSelect }) {
         </a>
     );
 
-    const renderDropdown = (selected, onSelect, label) => (
+    const renderDropdown = (selected, onSelect) => (
         <div className="dropdown">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                {renderNetworkItem(selected.name, selected.img, null)}
-                <span>{selected.name}</span>
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                {renderNetworkItem(selected?.name, selected?.img, () => {})}
             </button>
             <div className="dropdown-menu">
                 {networks.map(network =>
@@ -60,11 +71,11 @@ export default function NetworkSelection({ onNetworkSelect }) {
     return (
         <div className="row">
             <div className="col-md-5">
-                {renderDropdown(selectedOrigin, selectNetworkOrigin, 'Origin')}
+                {renderDropdown(selectedOrigin, selectNetworkOrigin)}
             </div>
             <div className="col-md-2"></div>
             <div className="col-md-5">
-                {renderDropdown(selectedTarget, selectNetworkTarget, 'Target')}
+                {renderDropdown(selectedTarget, selectNetworkTarget)}
             </div>
         </div>
     );
