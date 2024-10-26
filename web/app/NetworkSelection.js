@@ -17,7 +17,7 @@ export default function NetworkSelection({ onNetworkSelect }) {
         setChain(chainName);
 
         const updatedNetworks = [
-            { id: GNC, name: gncName, img: 'img/chain-1.png' },
+            { id: GNC, name: gncName, img: 'img/gnc.png' },
             { id: CHAIN, name: chainName, img: 'img/chain-137.png' }
         ];
         setNetworks(updatedNetworks);
@@ -57,7 +57,7 @@ export default function NetworkSelection({ onNetworkSelect }) {
 
     const renderDropdown = (selected, onSelect) => (
         <div className="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+            <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
                 {renderNetworkItem(selected?.name, selected?.img, () => {})}
             </button>
             <div className="dropdown-menu">

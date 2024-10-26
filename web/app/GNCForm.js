@@ -118,7 +118,7 @@ function GNCForm() {
     }
 
     return (
-        <div className="col-md-12">
+        <div className="form" id="form_gnc">
             <p>Contract balance: {contractBalance}</p>
             <p>Balance: {balance}</p>
             <div className="form-group">

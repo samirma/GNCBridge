@@ -1,4 +1,4 @@
-import './css/bootstrap.min.css'
+import  "bootstrap/dist/css/bootstrap.min.css"
 import './css/style.css'
 import { Inter } from 'next/font/google'
 
@@ -10,6 +10,8 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+
+
   return (
     <html lang="en">
       <head>
@@ -33,9 +35,6 @@ export default function RootLayout({ children }) {
             <div className="col-md-3"></div>
           </div>
         </div>
-        <script src="js/jquery.min.js" async />
-        <script src="js/bootstrap.min.js" async />
-        <script src="js/scripts.js" async />
       </body>
     </html>
   )

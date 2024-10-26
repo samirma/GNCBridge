@@ -49,11 +49,21 @@ const networks = {
       chainId: '0x7A69', 
       chainName: 'Greener Coin Mainnet',
       nativeCurrency: {
-          name: 'ETH',
-          symbol: 'ETH',
+          name: 'GNC',
+          symbol: 'GNC',
           decimals: 18,
       },
-      rpcUrls: ['http://35.208.144.105:8545']
+      rpcUrls: ['http://mainnet.greenercoin.io:8545']
+  },
+  'gnc_test': {
+      chainId: '0x7A69', 
+      chainName: 'Greener Coin Testnet',
+      nativeCurrency: {
+          name: 'GNC',
+          symbol: 'GNC',
+          decimals: 18,
+      },
+      rpcUrls: ['http://testnet.greenercoin.io:8545']
   },
   'fantom': {
     "chainId": "0xfa",
