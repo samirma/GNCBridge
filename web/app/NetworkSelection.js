@@ -32,7 +32,7 @@ export default function NetworkSelection({ onNetworkSelect }) {
             if (selectedNetwork.id === selectedTarget.id) {
                 setSelectedTarget(networks.find(network => network.id !== id));
             }
-            onNetworkSelect(selectedNetwork);
+            onNetworkSelect(selectedNetwork.id);
         }
     };
 
