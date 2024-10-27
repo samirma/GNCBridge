@@ -14,6 +14,7 @@ export default function App() {
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
+    handleNetworkSelect(CHAIN);
   }, []);
 
   const handleNetworkSelect = (network) => {
@@ -24,7 +25,7 @@ export default function App() {
     <div className="row swap_box_border">
       <div className="col-md-12">
       <br /><br />
-      <NetworkSelection onNetworkSelect={handleNetworkSelect} />
+      {/* <NetworkSelection onNetworkSelect={handleNetworkSelect} /> */}
         <br /><br />
         {state === GNC && <GNCForm />}
         {state === CHAIN && <ChainForm />}

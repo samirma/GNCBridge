@@ -98,6 +98,13 @@ function ChainForm() {
         }
     }, [connected]);
 
+    const formatBalance = (balance) => {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(balance);
+      };
+
     async function handleApprove() {
         setLoading(true);
         setError('');
@@ -146,8 +153,7 @@ function ChainForm() {
 
     if (loading) {
         return <div className="spinner-border" role="status">
-            aaaaaa
-                    <span className="sr-only">Loading...</span>
+                    <span className="sr-only"></span>
                 </div>
     }
 
@@ -161,7 +167,7 @@ function ChainForm() {
 
     return (
         <div className="form" id="form_chain">
-            <p className="user_balance">Balance: <span className="user_balance" >{balance} GNC</span></p>
+            <p className="user_balance">Balance: <span className="user_balance" >{formatBalance(balance)} GNC</span></p>
 
             <p className="user_wallet_address">User wallet address: <span className="user_wallet_address" >{wallet_address} </span></p>
 

@@ -21,8 +21,6 @@ export default function RootLayout({ children }) {
         <title>Greenrcoin Swap & Bridge</title>
         <meta name="description" content="Source code generated using layoutit.com" />
         <meta name="author" content="LayoutIt!" />
-        <link href="css/bootstrap.min.css" rel="stylesheet" />
-        <link href="css/style.css" rel="stylesheet" />
       </head>
       <body className={inter.className}>
         <div className="container-fluid">

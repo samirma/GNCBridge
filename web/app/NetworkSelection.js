@@ -46,8 +46,8 @@ export default function NetworkSelection({ onNetworkSelect }) {
         }
     };
 
-    const renderNetworkItem = (name, img, action) => (
-        <a className="dropdown-item" href="#" onClick={action}>
+    const renderNetworkItem = (name, img, action, key) => (
+        <a className="dropdown-item" href="#" onClick={action} key={key}>
             <div className="network_img">
                 <img src={img} alt={name} />
             </div>
@@ -58,11 +58,11 @@ export default function NetworkSelection({ onNetworkSelect }) {
     const renderDropdown = (selected, onSelect) => (
         <div className="dropdown">
             <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                {renderNetworkItem(selected?.name, selected?.img, () => {})}
+                {renderNetworkItem(selected?.name, selected?.img, () => {}, selected?.id)}
             </button>
             <div className="dropdown-menu">
                 {networks.map(network =>
-                    renderNetworkItem(network.name, network.img, () => onSelect(network.id))
+                    renderNetworkItem(network.name, network.img, () => onSelect(network.id), network.id)
                 )}
             </div>
         </div>
