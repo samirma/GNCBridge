@@ -1,2 +1,2 @@
-export const CHAIN = 'local1'
+export const CHAIN = 'polygon'
 export const GNC = 'local2'

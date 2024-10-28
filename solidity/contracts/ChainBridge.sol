@@ -3,15 +3,16 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
-contract ChainBridge is Ownable {
+contract ChainBridge is Ownable, Pausable {
     
     constructor(address initialOwner) Ownable(initialOwner) {}
-    
+
     event TransferCompleted(address indexed to, uint256 amount);
     event Deposit(address by, uint256 amount);
 
-    function depositToken(address _token, uint256 _amount) public {
+    function depositToken(address _token, uint256 _amount) public whenNotPaused {
         IERC20 token = IERC20(_token);
         require(token.balanceOf(msg.sender) >= _amount, "Not enough balance");
         uint256 allowance = token.allowance(msg.sender, address(this));
@@ -33,5 +34,13 @@ contract ChainBridge is Ownable {
         token.transfer(_to, _amount);
 
         emit TransferCompleted(_to, _amount);
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
     }
 }

@@ -24,16 +24,11 @@ const networks = {
     },
     'polygon': {
         "chainId": "0x89",
-        "chainName": "Polygon",
-        "rpcUrls": ["https://rpc-mainnet.maticvigil.com/"],
-        "nativeCurrency": {
-          "name": "Matic",
-          "symbol": "MATIC",
-          "decimals": 18
-        },
-        "blockExplorerUrls": ["https://polygonscan.com"]
+        chainName: 'Matic(Polygon) Mainnet',
+        nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+        rpcUrls: ['https://polygon-rpc.com'],
+        blockExplorerUrls: ['https://www.polygonscan.com'],
       },
-
     'avalanche': {
         "chainId": "0xa86a",
         "chainName": "Avalanche",
