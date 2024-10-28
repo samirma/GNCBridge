@@ -40,7 +40,7 @@ function ChainForm() {
         };
 
         function onError(errorMessage) {
-            console.error('Error:', errorMessage);
+            console.log('Error:', errorMessage);
             setError(errorMessage);
         };
 
@@ -54,7 +54,7 @@ function ChainForm() {
             await initializeEthers();
             await handleConnect();
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
             setError("Fail on connectWallet: " + error.message);
         } finally {
             setLoading(false);
@@ -83,7 +83,7 @@ function ChainForm() {
                 setTransactionStatus('Token is not approved');
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
             setError("Fail on fetchBalance: " + error.message);
         } finally {
             setLoading(false);
@@ -99,10 +99,7 @@ function ChainForm() {
     }, [connected]);
 
     const formatBalance = (balance) => {
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(balance);
+        return Intl.NumberFormat("en-US").format(balance);
       };
 
     async function handleApprove() {
@@ -116,7 +113,7 @@ function ChainForm() {
             setIsApproved(true);
             setTransactionStatus('Approved');
         } catch (error) {
-            console.error(error);
+            console.log(error);
             setError(error.message);
         } finally {
             setLoading(false);
