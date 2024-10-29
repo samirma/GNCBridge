@@ -32,33 +32,12 @@ To get started with the Greener Coin Bridge, follow these steps:
 
 ## Usage
 
-- Start only the `bot` service:
-  ```bash
-  docker-compose up bot
-  ```
-
-- Start only the `bridge` service:
-  ```bash
-  docker-compose up bridge
-  ```
-
 - Start both the `bot` and `bridge` services:
-  ```bash
-  docker-compose up bot bridge
-  docker-compose up
-  ```
-
-- Start the `bot` service in detached mode:
-  ```bash
-  docker-compose up -d bot
-  ```
-
-- Rebuild and start the `bot` service:
-```bash
-docker-compose up --build bot
-docker-compose up --build bridge
-docker-compose up --build 
-```
+    ```bash
+    docker-compose up --build bot
+    docker-compose up --build bridge
+    docker-compose up --build 
+    ```
 
 ## Contributing
 
