@@ -54,7 +54,7 @@ To get started with the Greener Coin Bridge, follow these steps:
   ```
 
 - Rebuild and start the `bot` service:
-  ```bash
+```bash
 docker-compose up --build bot
 docker-compose up --build bridge
 docker-compose up --build 
