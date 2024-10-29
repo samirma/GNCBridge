@@ -41,24 +41,25 @@ const networks = {
         "blockExplorerUrls": ["https://snowtrace.io"]
   },
   'gnc_main': {
-      chainId: '0x7A69', 
-      chainName: 'Greener Coin Mainnet',
-      nativeCurrency: {
-          name: 'GNC',
-          symbol: 'GNC',
-          decimals: 18,
-      },
-      rpcUrls: ['http://mainnet.greenercoin.io:8545']
+    "chainId": '0x4cd', 
+    "chainName": "GNC",
+    "rpcUrls": ["https://mainnet.greenercoin.io:8545"],
+    "nativeCurrency": {
+      "name": "Fantom",
+      "symbol": "GNC",
+      "decimals": 18
+    },
+    "blockExplorerUrls": ["https://ftmscan.com"]
   },
   'gnc_test': {
-      chainId: '0x7A69', 
-      chainName: 'Greener Coin Testnet',
-      nativeCurrency: {
-          name: 'GNC',
-          symbol: 'GNC',
-          decimals: 18,
+    "chainId": '0x4cd', 
+      "chainName": 'Greener Coin Testnet',
+      "nativeCurrency": {
+          "name": 'GNC',
+          "symbol": 'GNC',
+          "decimals": 18,
       },
-      rpcUrls: ['http://testnet.greenercoin.io:8545']
+      "rpcUrls": ['http://testnet.greenercoin.io:8545']
   },
   'fantom': {
     "chainId": "0xfa",
