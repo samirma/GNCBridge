@@ -58,7 +58,7 @@ To get started with the Greener Coin Bridge, follow these steps:
 docker-compose up --build bot
 docker-compose up --build bridge
 docker-compose up --build 
-  ```
+```
 
 ## Contributing
 
