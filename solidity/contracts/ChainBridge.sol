@@ -7,33 +7,39 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 
 contract ChainBridge is Ownable, Pausable {
     
+    mapping(bytes32 => bool) public completedTransfers;
+
     constructor(address initialOwner) Ownable(initialOwner) {}
 
-    event TransferCompleted(address indexed to, uint256 amount);
-    event Deposit(address by, uint256 amount);
+    event TransferCompleted(address indexed to, bytes32 indexed transferId, uint256 amount);
+    event Deposit(address indexed by, uint256 amount, bytes32 indexed transferId);
 
-    function depositToken(address _token, uint256 _amount) public whenNotPaused {
+    function deposit(address _token, uint256 _amount) public whenNotPaused {
         IERC20 token = IERC20(_token);
         require(token.balanceOf(msg.sender) >= _amount, "Not enough balance");
-        uint256 allowance = token.allowance(msg.sender, address(this));
-        require(allowance >= _amount, "Check the token allowance");
-        token.transferFrom(msg.sender, address(this), _amount);
-        emit Deposit(msg.sender, _amount);
+        require(token.allowance(msg.sender, address(this)) >= _amount, "Check the token allowance");
+        
+        bytes32 transferId = keccak256(abi.encodePacked(msg.sender, block.timestamp, _amount));
+        require(!completedTransfers[transferId], "Transfer already completed");
+        
+        bool success = token.transferFrom(msg.sender, address(this), _amount);
+        require(success, "Transfer failed");
+        
+        completedTransfers[transferId] = true;
+        emit Deposit(msg.sender, _amount, transferId);
     }
 
-    function withdrawToken(address _token, uint256 _amount) public onlyOwner {
-        IERC20 token = IERC20(_token);
-        require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
-        token.transfer(msg.sender, _amount);
-    }
-
-    function transferToken(address _token, address _to, uint256 _amount) public onlyOwner {
+    function release(address _token, address _to, uint256 _amount, bytes32 _transferId) public onlyOwner {
+        require(!completedTransfers[_transferId], "Transfer already completed");
+        
         IERC20 token = IERC20(_token);
         require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
 
-        token.transfer(_to, _amount);
+        bool success = token.transfer(_to, _amount);
+        require(success, "Transfer failed");
 
-        emit TransferCompleted(_to, _amount);
+        completedTransfers[_transferId] = true;
+        emit TransferCompleted(_to, _transferId, _amount);
     }
 
     function pause() public onlyOwner {

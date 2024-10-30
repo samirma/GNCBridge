@@ -10,11 +10,11 @@ import { GNC, CHAIN } from 'shared/constants/env';
 import { getNetworkConfig } from 'shared/constants/networks';
 
 export default function App() {
-  const [state, setState] = useState("chain");
+  const [state, setState] = useState("");
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
-    handleNetworkSelect(CHAIN);
+    handleNetworkSelect(GNC);
   }, []);
 
   const handleNetworkSelect = (network) => {

@@ -12,54 +12,59 @@ const GNC_URL = getNetworkConfig(GNC).rpcUrls[0];
 const CHAIN_URL = getNetworkConfig(CHAIN).rpcUrls[0];
 
 async function main() {
-    
-    // Provider for GNC blockchain
-    console.log(`Creating GNC provider to url: ` + GNC_URL);
     const gncProvider = new ethers.JsonRpcProvider(GNC_URL);
-    // Provider for CHAIN blockchain
-    console.log(`Creating chain provider to url: ` + CHAIN_URL);
     const chainProvider = new ethers.JsonRpcProvider(CHAIN_URL);
 
-    // Contract instance for GNC bridge contract
     const gncBridgeContract = new ethers.Contract(GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE, gncProvider);
-
-    // Contract instance for CHAIN bridge contract
     const chainBridgeContract = new ethers.Contract(CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE, chainProvider);
 
-    // Connect to the CHAIN bridge contract with a signer
-    const chainsigner = new ethers.Wallet(process.env.privateKey, chainProvider);
-    const chainBridgeWithSigner = chainBridgeContract.connect(chainsigner);
-
-    // Connect to the CHAIN bridge contract with a signer
+    const chainSigner = new ethers.Wallet(process.env.privateKey, chainProvider);
     const gncSigner = new ethers.Wallet(process.env.privateKey, gncProvider);
 
-    console.log(`Waiting for Deposit events on GNC blockchain`);
-    gncBridgeContract.on("Deposit", async (by, amount) => {
+    const gncBridgeWithSigner = gncBridgeContract.connect(gncSigner);
+    const chainBridgeWithSigner = chainBridgeContract.connect(chainSigner);
+
+    console.log(`Listening for bridge events...`);
+
+    // Listen for deposits on GNC blockchain
+    gncBridgeContract.on("Deposit", async (by, amount, transferId) => {
         try {
-            console.log(`Deposit event detected on GNC blockchain: ${by} deposited ${amount.toString()}`);
-    
-            // Call completeBridge function on CHAIN blockchain
-            await chainBridgeWithSigner.transferToken(TOKEN_ADDRESS, by, amount);
-            console.log(`transferToken called on CHAIN blockchain for ${by} with amount ${amount.toString()}`);
+            console.log(`Deposit detected on GNC: ${by} deposited ${amount.toString()}`);
+            
+            // Verify if transfer is already completed on Chain
+            const isCompleted = await chainBridgeContract.completedTransfers(transferId);
+            if (isCompleted) {
+                console.log(`Transfer ${transferId} already completed on Chain`);
+                return;
+            }
+
+            // Release tokens on Chain
+            const tx = await chainBridgeWithSigner.release(by, amount, transferId);
+            await tx.wait();
+            console.log(`Released ${amount.toString()} tokens to ${by} on Chain`);
         } catch (error) {
-            console.error(`Error handling Deposit event on GNC: ${error}`);
+            console.error(`Error processing GNC deposit: ${error}`);
         }
     });
 
-    console.log(`Waiting for Deposit events on CHAIN blockchain`);
-    chainBridgeContract.on("Deposit", async (by, amount) => {
+    // Listen for deposits on Chain blockchain
+    chainBridgeContract.on("Deposit", async (by, amount, transferId) => {
         try {
-            console.log(`Deposit event detected on CHAIN blockchain: ${by} deposited ${amount.toString()}`);
+            console.log(`Deposit detected on Chain: ${by} deposited ${amount.toString()}`);
+            
+            // Verify if transfer is already completed on GNC
+            const isCompleted = await gncBridgeContract.completedTransfers(transferId);
+            if (isCompleted) {
+                console.log(`Transfer ${transferId} already completed on GNC`);
+                return;
+            }
 
-            // Transfer the amount from the wallet to the `by` address
-            const tx = await gncSigner.sendTransaction({
-                to: by,
-                value: amount
-            });
+            // Release native currency on GNC
+            const tx = await gncBridgeWithSigner.release(by, amount, transferId, { value: amount });
             await tx.wait();
-            console.log(`Transferred ${amount.toString()} to ${by}`);
+            console.log(`Released ${amount.toString()} native currency to ${by} on GNC`);
         } catch (error) {
-            console.error(`Error handling Deposit event on CHAIN: ${error}`);
+            console.error(`Error processing Chain deposit: ${error}`);
         }
     });
 }

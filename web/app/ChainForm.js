@@ -54,7 +54,7 @@ function ChainForm() {
             await initializeEthers();
             await handleConnect();
         } catch (error) {
-            console.error(error.message);
+            console.log(error.message);
             setError("Fail on connectWallet: " + error.message);
         } finally {
             setLoading(false);
@@ -68,13 +68,16 @@ function ChainForm() {
             const tokenDecimals = await token.decimals();
             setDecimals(tokenDecimals);
 
-            const balance = await token.balanceOf(await signer.getAddress());
+            const address = await signer.getAddress();
+            setWalletAddress(address);
+
+            const balance = await token.balanceOf(address);
             setBalance(ethers.formatUnits(balance, decimals));
 
             const contractBalance = await token.balanceOf(CHAIN_BRIDGE_ADDRESS);
             setContractBalance(ethers.formatUnits(contractBalance, decimals));
 
-            const allowance = await token.allowance(await signer.getAddress(), CHAIN_BRIDGE_ADDRESS);
+            const allowance = await token.allowance(address, CHAIN_BRIDGE_ADDRESS);
             if (allowance > 0) {
                 setIsApproved(true);
                 setTransactionStatus('');
@@ -126,7 +129,7 @@ function ChainForm() {
         try {
             setTransactionStatus('Initiating transfer...');
             const amountToTransfer = ethers.parseUnits(amount, decimals);
-            const transferTx = await chainBridge.depositToken(TOKEN_ADDRESS, amountToTransfer);
+            const transferTx = await chainBridge.deposit(TOKEN_ADDRESS, amountToTransfer);
             await transferTx.wait();
 
             const balance = await token.balanceOf(await signer.getAddress());

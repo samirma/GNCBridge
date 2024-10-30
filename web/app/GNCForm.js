@@ -35,7 +35,7 @@ function GNCForm() {
         };
 
         function onError(errorMessage) {
-            console.error('Error:', errorMessage);
+            console.log('Error:', errorMessage);
             setError(errorMessage);
         };
 
@@ -48,7 +48,7 @@ function GNCForm() {
             await initializeEthers();
             await handleConnect();
         } catch (error) {
-            console.error(error);
+            console.log(error);
             setError("Fail on connectWallet: " + error.message);
         } finally {
             setLoading(false);
@@ -92,7 +92,7 @@ function GNCForm() {
             setTransactionStatus('Deposit successful!');
             setAmount(''); // Clear the input field
         } catch (error) {
-            console.error(error);
+            console.log(error);
             setError(error.message);
         } finally {
             setLoading(false);
