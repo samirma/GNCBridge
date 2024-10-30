@@ -39,7 +39,7 @@ async function main() {
             }
 
             // Release tokens on Chain
-            const tx = await chainBridgeWithSigner.release(by, amount, transferId);
+            const tx = await chainBridgeWithSigner.release(TOKEN_ADDRESS, by, amount, transferId);
             await tx.wait();
             console.log(`Released ${amount.toString()} tokens to ${by} on Chain`);
         } catch (error) {
@@ -47,7 +47,7 @@ async function main() {
         }
     });
 
-    // Listen for deposits on Chain blockchain
+    // // Listen for deposits on Chain blockchain
     chainBridgeContract.on("Deposit", async (by, amount, transferId) => {
         try {
             console.log(`Deposit detected on Chain: ${by} deposited ${amount.toString()}`);

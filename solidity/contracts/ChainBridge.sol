@@ -42,11 +42,4 @@ contract ChainBridge is Ownable, Pausable {
         emit TransferCompleted(_to, _transferId, _amount);
     }
 
-    function pause() public onlyOwner {
-        _pause();
-    }
-
-    function unpause() public onlyOwner {
-        _unpause();
-    }
 }

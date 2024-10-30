@@ -14,7 +14,7 @@ export default function App() {
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
-    handleNetworkSelect(GNC);
+    handleNetworkSelect(CHAIN);
   }, []);
 
   const handleNetworkSelect = (network) => {

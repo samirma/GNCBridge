@@ -19,7 +19,7 @@ async function initializeEthers() {
 function ChainForm() {
     const [connected, setConnected] = useState(false);
     const [balance, setBalance] = useState(0);
-    const [wallet_address, setWalletAddress] = useState(0);
+    const [walletAddress, setWalletAddress] = useState(0);
     const [contractBalance, setContractBalance] = useState(0);
     const [amount, setAmount] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
@@ -27,6 +27,18 @@ function ChainForm() {
     const [decimals, setDecimals] = useState(18); // Default to 18 decimals
     const [isApproved, setIsApproved] = useState(false);
     const [error, setError] = useState('');
+    const [isPaused, setIsPaused] = useState(false);
+
+    async function isContractPaused() {
+        try {
+            const paused = await chainBridge.paused();
+            return paused;
+        } catch (error) {
+            console.error("Failed to check if contract is paused:", error);
+            setError("Failed to check contract state: " + error.message);
+            return false; // Assume not paused on error, or handle as appropriate
+        }
+    }
 
     const handleConnect = async () => {
         function onConnected(isConnected) {
@@ -94,11 +106,23 @@ function ChainForm() {
     }
 
     useEffect(() => {
+        let intervalId;
+    
+        async function checkPausedState() {
+            const paused = await isContractPaused();
+            setIsPaused(paused);
+        }
+    
         if (connected) {
             fetchBalance();
+            intervalId = setInterval(checkPausedState, 10000); // Check every 10 seconds
         } else {
             connectWallet();
         }
+    
+        return () => {
+            if (intervalId) clearInterval(intervalId); // Cleanup the interval on component unmount
+        };
     }, [connected]);
 
     const formatBalance = (balance) => {
@@ -167,27 +191,64 @@ function ChainForm() {
 
     return (
         <div className="form" id="form_chain">
-            <p className="user_balance">Balance: <span className="user_balance" >{formatBalance(balance)} GNC</span></p>
-
-            <p className="user_wallet_address">User wallet address: <span className="user_wallet_address" >{wallet_address} </span></p>
-
-            <p className="gnc_token_address">Token Contract Address: <span className="gnc_token_address" >{TOKEN_ADDRESS}</span>  </p>
-
-            <p className="bridge_address">Bridge Contract Address: <span className="bridge_address" >{CHAIN_BRIDGE_ADDRESS} </span></p>
-
-            <div id="dev" className="dev_show">
-                <p className="contract_balance">Contract balance: <span className="contract_balance" >{contractBalance} </span></p>
-            </div>
-            <div className="form-group">
-                <label htmlFor="amount">Amount</label>
-                <input type="text" value={amount} placeholder="Amount to transfer" onChange={e => setAmount(e.target.value)} id="amount" />
-            </div>
-            {!isApproved && <button type="button" className="btn btn-success" onClick={handleApprove}>Approve</button>}
-            {isApproved && <button type="button" className="btn btn-success" disabled={!isValidAmount(amount)} onClick={handleTransfer}>Send to GNC</button>}
-            <p>{transactionStatus}</p>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+          <p className="user_balance">
+            Balance: <span className="user_balance">{formatBalance(balance)} GNC</span>
+          </p>
+    
+          <p className="user_wallet_address">
+            User wallet address: <span className="user_wallet_address">{walletAddress}</span>
+          </p>
+    
+          <p className="gnc_token_address">
+            Token Contract Address: <span className="gnc_token_address">{TOKEN_ADDRESS}</span>
+          </p>
+    
+          <p className="bridge_address">
+            Bridge Contract Address: <span className="bridge_address">{CHAIN_BRIDGE_ADDRESS}</span>
+          </p>
+    
+          <div id="dev" className="dev_show">
+            <p className="contract_balance">
+              Contract balance: <span className="contract_balance">{contractBalance}</span>
+            </p>
+          </div>
+    
+          <div className="form-group">
+            <label htmlFor="amount">Amount</label>
+            <input
+              type="text"
+              value={amount}
+              placeholder="Amount to transfer"
+              onChange={(e) => setAmount(e.target.value)}
+              disabled={isPaused}
+              id="amount"
+            />
+          </div>
+    
+          {!isApproved && (
+            <button
+              type="button"
+              className={`btn ${isPaused ? 'btn-secondary' : 'btn-success'}`}
+              onClick={handleApprove} >
+              Approve
+            </button>
+          )}
+    
+          {isApproved && (
+            <button
+              type="button"
+              className={`btn ${isPaused ? 'btn-secondary' : 'btn-success'}`}
+              disabled={!isValidAmount(amount)}
+              onClick={handleTransfer} >
+              Send to GNC
+            </button>
+          )}
+    
+          <p>{transactionStatus}</p>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {isPaused && <p style={{ color: 'orange' }}>The contract is currently paused. Functionality is limited.</p>}
         </div>
-    );
-}
+      );
+    };
 
 export default ChainForm;

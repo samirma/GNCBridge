@@ -22,6 +22,18 @@ function GNCForm() {
     const [loading, setLoading] = useState(false);
     const [decimals, setDecimals] = useState(18); // Default to 18 decimals
     const [error, setError] = useState('');
+    const [isPaused, setIsPaused] = useState(false);
+
+    async function isContractPaused() {
+        try {
+            const paused = await chainBridge.paused();
+            return paused;
+        } catch (error) {
+            console.error("Failed to check if contract is paused:", error);
+            setError("Failed to check contract state: " + error.message);
+            return false; // Assume not paused on error, or handle as appropriate
+        }
+    }
 
     const handleConnect = async () => {
         function onConnected(isConnected) {
@@ -41,6 +53,10 @@ function GNCForm() {
 
         await connectToGNC(onConnected, onLoading, onError);
     };
+
+    const formatBalance = (balance) => {
+        return Intl.NumberFormat("en-US").format(balance);
+      };
 
     async function connectWallet() {
         setLoading(true);
@@ -72,11 +88,24 @@ function GNCForm() {
     }
 
     useEffect(() => {
+        let intervalId;
+    
+        async function checkPausedState() {
+            const paused = await isContractPaused();
+            setIsPaused(paused);
+        }
+    
         if (connected) {
+            checkPausedState(); // Initial check
+            intervalId = setInterval(checkPausedState, 10000); // Check every 10 seconds
             fetchBalance();
         } else {
             connectWallet();
         }
+    
+        return () => {
+            if (intervalId) clearInterval(intervalId); // Cleanup the interval on component unmount
+        };
     }, [connected]);
 
     async function handleDeposit() {
@@ -85,7 +114,7 @@ function GNCForm() {
         try {
             setTransactionStatus('Initiating deposit...');
             const amountToDeposit = ethers.parseUnits(amount, decimals);
-            const depositTx = await chainBridge.deposit(amountToDeposit, { value: amountToDeposit });
+            const depositTx = await chainBridge.deposit({ value: amountToDeposit });
             await depositTx.wait();
 
             fetchBalance(); // Refresh balance after deposit
@@ -120,14 +149,30 @@ function GNCForm() {
     return (
         <div className="form" id="form_gnc">
             <p>Contract balance: {contractBalance}</p>
-            <p>Balance: {balance}</p>
+            <p className="user_balance">
+                Balance: <span className="user_balance">{formatBalance(balance)} GNC</span>
+            </p>
             <div className="form-group">
                 <label htmlFor="amount">Amount</label>
-                <input type="text" value={amount} placeholder="Amount to deposit" onChange={e => setAmount(e.target.value)} id="amount" />
+                <input 
+                    type="text" 
+                    value={amount} 
+                    placeholder="Amount to deposit" 
+                    onChange={e => setAmount(e.target.value)} 
+                    id="amount"
+                    disabled={isPaused} // Disable input when paused
+                />
             </div>
-            <button type="button" className="btn btn-success" disabled={!isValidAmount(amount)} onClick={handleDeposit}>Deposit Ether</button>
+            <button 
+                type="button" 
+                className={`btn ${isPaused ? 'btn-secondary' : 'btn-success'}`}
+                disabled={!isValidAmount(amount) || isPaused} // Disable button when paused or invalid amount
+                onClick={handleDeposit} >
+                Deposit Ether
+            </button>
             <p>{transactionStatus}</p>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            {isPaused && <p style={{ color: 'orange' }}>The contract is currently paused. Functionality is limited.</p>}
         </div>
     );
 }

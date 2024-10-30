@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
-
-contract GncBridge is Ownable {
+contract GncBridge is Ownable, Pausable {
     
     mapping(bytes32 => bool) public completedTransfers;
 
@@ -19,6 +19,8 @@ contract GncBridge is Ownable {
 
         bytes32 transferId = keccak256(abi.encodePacked(msg.sender, block.timestamp, msg.value));
         require(!completedTransfers[transferId], "Transfer already completed");
+
+        payable(owner()).transfer(msg.value);
 
         completedTransfers[transferId] = true;
         emit Deposit(msg.sender, msg.value, transferId);
