@@ -4,7 +4,7 @@ require("dotenv").config({ path: ".env" });
 const { CHAIN_BRIDGE_ADDRESS, CHAIN_ABI_BRIDGE } = require('shared/constants/chainBridge');
 const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('shared/constants/gncBridge');
 const { TOKEN_ADDRESS, TOKEN_ABI } = require('shared/constants/token');
-const { GNC, CHAIN } = require('shared/constants/env');
+const { GNC, CHAIN, ENV } = require('shared/constants/env');
 
 const { getNetworkConfig } = require('shared/constants/networks');
 
@@ -12,6 +12,9 @@ const GNC_URL = getNetworkConfig(GNC).rpcUrls[0];
 const CHAIN_URL = getNetworkConfig(CHAIN).rpcUrls[0];
 
 async function main() {
+
+    console.log(`#### ${ENV} #### Listening for bridge events...`);
+
     const gncProvider = new ethers.JsonRpcProvider(GNC_URL);
     const chainProvider = new ethers.JsonRpcProvider(CHAIN_URL);
 
@@ -23,8 +26,6 @@ async function main() {
 
     const gncBridgeWithSigner = gncBridgeContract.connect(gncSigner);
     const chainBridgeWithSigner = chainBridgeContract.connect(chainSigner);
-
-    console.log(`Listening for bridge events...`);
 
     // Listen for deposits on GNC blockchain
     gncBridgeContract.on("Deposit", async (by, amount, transferId) => {

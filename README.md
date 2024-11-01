@@ -34,6 +34,9 @@ To get started with the Greener Coin Bridge, follow these steps:
 
 - Start both the `bot` and `bridge` services:
     ```bash
+    SHARED_CONSTANTS_VOLUME=./shared/constants-prod 
+    SHARED_CONSTANTS_VOLUME=./shared/constants
+    
     docker-compose up --build bot
     docker-compose up --build bridge
     docker-compose up --build 

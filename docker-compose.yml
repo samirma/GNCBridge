@@ -9,10 +9,10 @@ services:
       - "80:3000"  # Map port 3000 from container to host
     volumes:
       - ./shared:/shared
-      - ${SHARED_CONSTANTS_VOLUME}:/app//node_modules/shared/constants
+      - ${SHARED_CONSTANTS_VOLUME}:/app/node_modules/shared/constants
     depends_on:
       - shared
-    command: ["cat", "/app/node_modules/shared/constants/env.js"]
+    command: ["sh", "start.sh"]
   bot:
     build:
       context: . 
@@ -20,10 +20,10 @@ services:
     volumes:
       - ./solidity:/app # Mount the solidity directory into the container
       - ./shared:/shared
-      - ${SHARED_CONSTANTS_VOLUME}:/node_modules/shared/constants
+      - ${SHARED_CONSTANTS_VOLUME}:/app/node_modules/shared/constants
     depends_on:
       - shared
-    command: ["npx", "hardhat", "run", "scripts/bot.js"]
+    command: ["sh", "start.sh"]
   shared:
       image: busybox
       volumes:
