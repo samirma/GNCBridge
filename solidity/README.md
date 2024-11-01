@@ -32,8 +32,6 @@ npx hardhat run --network local2 scripts/gnc_bridge_deploy.js
 ```
 
 ```shell
-npx hardhat run scripts/chain_to_gnc_bot.js
-npx hardhat run scripts/gnc_to_chain_bot.js
 npx hardhat run scripts/bot.js
 ```
 

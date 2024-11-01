@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { getNetworkConfig } from 'shared/constants/networks';
+import { getNetworkConfig } from 'shared/networks';
 import { GNC, CHAIN } from 'shared/constants/env';
 
 export const handleChainChanged = (setNetwork) => (chainId) => {

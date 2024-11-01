@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getNetworkConfig } from 'shared/constants/networks';
+import { getNetworkConfig } from 'shared/networks';
 import { GNC, CHAIN } from 'shared/constants/env';
 import { handleChainChanged, connectToChain, connectToGNC } from './web3';
 
