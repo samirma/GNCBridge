@@ -1,7 +1,7 @@
 
 const networks = {
     'local1': {
-        "chainId": "0xfa",
+      "chainId": "0x89",
         "chainName": "local1",
         "rpcUrls": ["http://localhost:8545"],
         "nativeCurrency": {
@@ -9,24 +9,24 @@ const networks = {
           "symbol": "FTM",
           "decimals": 18
         },
-        "blockExplorerUrls": ["https://ftmscan.com"]
+        "blockExplorerUrls": ["https://polygonscan.com"]
     },
     'local2': {
-        "chainId": "0xa86a",
+        "chainId": '0x4cd', 
         "chainName": "local2",
         "rpcUrls": ["http://localhost:8546"],
         "nativeCurrency": {
-        "name": "Avalanche",
-        "symbol": "AVAX",
-        "decimals": 18
+          "name": 'GNC',
+          "symbol": 'GNC',
+          "decimals": 18
         },
         "blockExplorerUrls": ["https://snowtrace.io"]
     },
     'polygon': {
         "chainId": "0x89",
         "chainName": 'Matic(Polygon) Mainnet',
-        "nativeCurrency": { "name": 'MATIC', "symbol": 'MATIC', "decimals": 18 },
-        "rpcUrls": ['https://polygon-rpc.com'],
+        "nativeCurrency": { "name": 'POL', "symbol": 'POL', "decimals": 18 },
+        "rpcUrls": ['https://polygon-mainnet.wallet.brave.com/'],
         "blockExplorerUrls": ['https://www.polygonscan.com'],
       },
     'avalanche': {
@@ -43,10 +43,10 @@ const networks = {
   'gnc_main': {
     "chainId": '0x4cd', 
     "chainName": "GNC",
-    "rpcUrls": ["https://mainnet.greenercoin.io:8545"],
+    "rpcUrls": ["http://mainnet.greenercoin.io:8545"],
     "nativeCurrency": {
-      "name": "Fantom",
-      "symbol": "GNC",
+      "name": 'GNC',
+      "symbol": 'GNC',
       "decimals": 18
     },
     "blockExplorerUrls": ["https://ftmscan.com"]

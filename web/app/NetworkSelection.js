@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getNetworkConfig } from 'shared/constants/networks';
+import { getNetworkConfig } from 'shared/networks';
 import { GNC, CHAIN } from 'shared/constants/env';
 
 export default function NetworkSelection({ onNetworkSelect }) {

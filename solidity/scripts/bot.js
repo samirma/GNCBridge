@@ -12,7 +12,6 @@ const GNC_URL = getNetworkConfig(GNC).rpcUrls[0];
 const CHAIN_URL = getNetworkConfig(CHAIN).rpcUrls[0];
 
 async function main() {
-
     console.log(`#### ${ENV} #### Listening for bridge events...`);
 
     const gncProvider = new ethers.JsonRpcProvider(GNC_URL);
@@ -27,7 +26,27 @@ async function main() {
     const gncBridgeWithSigner = gncBridgeContract.connect(gncSigner);
     const chainBridgeWithSigner = chainBridgeContract.connect(chainSigner);
 
-    // Listen for deposits on GNC blockchain
+    logBalances(chainProvider, chainSigner, gncProvider, gncSigner);
+
+    listenForGncDeposits(gncBridgeContract, chainBridgeContract, chainBridgeWithSigner);
+
+    listenForChainDeposits(chainBridgeContract, gncBridgeContract, gncBridgeWithSigner);
+
+}
+
+async function logBalances(chainProvider, chainSigner, gncProvider, gncSigner) {
+    console.log(`CHAIN => contract: ${CHAIN_BRIDGE_ADDRESS} Provider: ${CHAIN_URL}`);
+    console.log(`GNC => contract: ${GNC_BRIDGE_ADDRESS} Provider: ${GNC_URL}`);
+
+    const chainBalance = await chainProvider.getBalance(chainSigner.address);
+    console.log(`CHAIN => Balance: ${chainBalance} ETH`);
+
+    const gncBalance = await gncProvider.getBalance(gncSigner.address);    
+    console.log(`GNC => Balance: ${gncBalance} ETH`);
+}
+
+function listenForGncDeposits(gncBridgeContract, chainBridgeContract, chainBridgeWithSigner) {
+    console.log(`Listen for deposits on GNC blockchain`);
     gncBridgeContract.on("Deposit", async (by, amount, transferId) => {
         try {
             console.log(`Deposit detected on GNC: ${by} deposited ${amount.toString()}`);
@@ -47,8 +66,10 @@ async function main() {
             console.error(`Error processing GNC deposit: ${error}`);
         }
     });
+}
 
-    // // Listen for deposits on Chain blockchain
+function listenForChainDeposits(chainBridgeContract, gncBridgeContract, gncBridgeWithSigner) {
+    console.log(`Listen for deposits on Chain blockchain`);
     chainBridgeContract.on("Deposit", async (by, amount, transferId) => {
         try {
             console.log(`Deposit detected on Chain: ${by} deposited ${amount.toString()}`);

@@ -7,7 +7,7 @@ import About from './about';
 import MintToken from './MintToken';
 import NetworkSelection from './NetworkSelection'
 import { GNC, CHAIN } from 'shared/constants/env';
-import { getNetworkConfig } from 'shared/constants/networks';
+import { getNetworkConfig } from 'shared/networks';
 
 export default function App() {
   const [state, setState] = useState("");

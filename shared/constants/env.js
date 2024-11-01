@@ -1,3 +1,4 @@
-export const CHAIN = 'local1'
-export const GNC = 'local2'
+export const CHAIN = 'polygon'
+export const GNC = 'gnc_main'
+
 export const ENV = 'dev'

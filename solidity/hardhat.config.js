@@ -24,6 +24,14 @@ module.exports = {
       accounts: [process.env.privateKey],
       gasPrice: 2118876494
     },
+    polygon: {
+      url: `https://polygon-rpc.com`,
+      accounts: [process.env.privateKey]
+    },
+    gnc_main: {
+      url: `http://mainnet.greenercoin.io:8545`,
+      accounts: [process.env.privateKey]
+    },
   },
   solidity: {
     settings: {
