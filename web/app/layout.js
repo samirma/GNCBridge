@@ -1,6 +1,7 @@
 import  "bootstrap/dist/css/bootstrap.min.css"
 import './css/style.css'
 import { Inter } from 'next/font/google'
+import { ENV } from 'shared/constants/env';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +26,11 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <div className="container-fluid">
           <div className="row">
+          <div id="dev" className="dev_show">
+            <p className="Environment">
+            Environment: <span className="contract_balance">{ENV}</span>
+            </p>
+          </div>
             <div className="col-md-3"></div>
             <div className="col-md-6">
               <br /><br />
