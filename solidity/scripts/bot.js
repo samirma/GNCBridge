@@ -6,10 +6,10 @@ const { GNC_BRIDGE_ADDRESS, GNC_ABI_BRIDGE } = require('shared/constants/gncBrid
 const { TOKEN_ADDRESS, TOKEN_ABI } = require('shared/constants/token');
 const { GNC, CHAIN, ENV } = require('shared/constants/env');
 
-const { getNetworkConfig } = require('shared/networks');
+const { getNetworkConfigForBot } = require('shared/networks');
 
-const GNC_URL = getNetworkConfig(GNC).rpcUrls[0];
-const CHAIN_URL = getNetworkConfig(CHAIN).rpcUrls[0];
+const GNC_URL = getNetworkConfigForBot(GNC).rpcUrls[0];
+const CHAIN_URL = getNetworkConfigForBot(CHAIN).rpcUrls[0];
 
 async function main() {
     console.log(`#### ${ENV} #### Listening for bridge events...`);
