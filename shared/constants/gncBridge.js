@@ -1,4 +1,4 @@
-export const GNC_BRIDGE_ADDRESS = "0x20797Ce673e82aE56B69cad610DE392415983781";
+export const GNC_BRIDGE_ADDRESS = "0x2D1986e7Cb99B56412ae9e7ba459c577b67E8e7B";
 export const GNC_ABI_BRIDGE = [
   "constructor(address)",
   "error EnforcedPause()",

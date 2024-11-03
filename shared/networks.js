@@ -1,7 +1,7 @@
 
 const networks = {
     'local1': {
-      "chainId": "0x89",
+      "chainId": "0xfa",
         "chainName": "local1",
         "rpcUrls": ["http://localhost:8545"],
         "nativeCurrency": {
@@ -26,7 +26,7 @@ const networks = {
         "chainId": "0x89",
         "chainName": 'Matic(Polygon) Mainnet',
         "nativeCurrency": { "name": 'POL', "symbol": 'POL', "decimals": 18 },
-        "rpcUrls": ['https://polygon-mainnet.wallet.brave.com/'],
+        "rpcUrls": ['https://polygon.drpc.org'],
         "blockExplorerUrls": ['https://www.polygonscan.com'],
       },
     'avalanche': {

@@ -32,11 +32,16 @@ To get started with the Greener Coin Bridge, follow these steps:
 
 ## Usage
 
+- Setup the .env to select dev or prod enviroment
+    ```
+    #Production:
+    SHARED_CONSTANTS_VOLUME=./shared/constants-prod 
+    #Dev
+    SHARED_CONSTANTS_VOLUME=./shared/constants
+    ```
+
 - Start both the `bot` and `bridge` services:
     ```bash
-    SHARED_CONSTANTS_VOLUME=./shared/constants-prod 
-    SHARED_CONSTANTS_VOLUME=./shared/constants
-    
     docker-compose up --build bot
     docker-compose up --build bridge
     docker-compose up --build 
