@@ -20,9 +20,9 @@ contract GncBridge is Ownable, Pausable {
         bytes32 transferId = keccak256(abi.encodePacked(msg.sender, block.timestamp, msg.value));
         require(!completedTransfers[transferId], "Transfer already completed");
 
-        payable(owner()).transfer(msg.value);
-
         completedTransfers[transferId] = true;
+
+        payable(owner()).transfer(msg.value);
         emit Deposit(msg.sender, msg.value, transferId);
     }
 
@@ -32,10 +32,11 @@ contract GncBridge is Ownable, Pausable {
         // Log the current ETH balance
         console.log("Current ETH balance:", address(this).balance);
 
+        completedTransfers[_transferId] = true;
+
         (bool success, ) = _to.call{value: _amount}("");
         require(success, "Transfer failed");
-
-        completedTransfers[_transferId] = true;
+        
         emit TransferCompleted(_to, _transferId, _amount);
     }
 

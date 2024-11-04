@@ -22,10 +22,11 @@ contract ChainBridge is Ownable, Pausable {
         bytes32 transferId = keccak256(abi.encodePacked(msg.sender, block.timestamp, _amount));
         require(!completedTransfers[transferId], "Transfer already completed");
         
+        completedTransfers[transferId] = true;
+        
         bool success = token.transferFrom(msg.sender, address(this), _amount);
         require(success, "Transfer failed");
         
-        completedTransfers[transferId] = true;
         emit Deposit(msg.sender, _amount, transferId);
     }
 
@@ -35,10 +36,11 @@ contract ChainBridge is Ownable, Pausable {
         IERC20 token = IERC20(_token);
         require(token.balanceOf(address(this)) >= _amount, "Not enough balance in contract");
 
+        completedTransfers[_transferId] = true;
+
         bool success = token.transfer(_to, _amount);
         require(success, "Transfer failed");
 
-        completedTransfers[_transferId] = true;
         emit TransferCompleted(_to, _transferId, _amount);
     }
 

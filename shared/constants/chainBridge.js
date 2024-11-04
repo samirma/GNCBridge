@@ -1,4 +1,4 @@
-export const CHAIN_BRIDGE_ADDRESS = "0x2D1986e7Cb99B56412ae9e7ba459c577b67E8e7B";
+export const CHAIN_BRIDGE_ADDRESS = "0xc2510D21b849223845010e12FBA718022467e30B";
 export const CHAIN_ABI_BRIDGE = [
   "constructor(address)",
   "error EnforcedPause()",
