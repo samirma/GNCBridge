@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GncBridge is Ownable, Pausable, ReentrancyGuard {
     
@@ -44,4 +45,16 @@ contract GncBridge is Ownable, Pausable, ReentrancyGuard {
     receive() external payable {
         revert("Use deposit function to send Ether");
     }
+
+    function withdraw(uint256 _amount) public onlyOwner {
+        require(address(this).balance >= _amount, "Insufficient balance");
+        payable(owner()).transfer(_amount);
+    }
+
+    function withdrawTokens(address _tokenContract, uint256 _amount) public onlyOwner {
+        IERC20 token = IERC20(_tokenContract);
+        require(token.balanceOf(address(this)) >= _amount, "Insufficient token balance");
+        token.transfer(owner(), _amount);
+    }
+
 }

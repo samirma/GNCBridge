@@ -45,4 +45,15 @@ contract ChainBridge is Ownable, Pausable, ReentrancyGuard {
         emit TransferCompleted(_to, _transferId, _amount);
     }
 
+    function withdraw(uint256 _amount) public onlyOwner {
+        require(address(this).balance >= _amount, "Insufficient balance");
+        payable(owner()).transfer(_amount);
+    }
+
+    function withdrawTokens(address _tokenContract, uint256 _amount) public onlyOwner {
+        IERC20 token = IERC20(_tokenContract);
+        require(token.balanceOf(address(this)) >= _amount, "Insufficient token balance");
+        token.transfer(owner(), _amount);
+    }
+
 }
