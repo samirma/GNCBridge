@@ -1,5 +1,5 @@
 
-const alchemyKey = process.env.ALCHEMY_KEY;
+const node_key = process.env.node_key;
 
 const networks = {
     'local1': {
@@ -81,7 +81,7 @@ const networksForBot = {
         "chainId": "0x89",
         "chainName": 'Matic(Polygon) Mainnet',
         "nativeCurrency": { "name": 'POL', "symbol": 'POL', "decimals": 18 },
-        "rpcUrls": ['https://polygon-mainnet.g.alchemy.com/v2/' + alchemyKey],
+        "rpcUrls": ['https://winter-morning-pool.matic.quiknode.pro/' + node_key ],
         "blockExplorerUrls": ['https://www.polygonscan.com'],
     }
 };
