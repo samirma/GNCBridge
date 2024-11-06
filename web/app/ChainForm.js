@@ -153,7 +153,13 @@ function ChainForm() {
         try {
             setTransactionStatus('Initiating transfer...');
             const amountToTransfer = ethers.parseUnits(amount, decimals);
-            const transferTx = await chainBridge.deposit(TOKEN_ADDRESS, amountToTransfer);
+
+            const fee = await chainBridge.fee();
+    
+            const transferTx = await chainBridge.deposit(TOKEN_ADDRESS, 
+                amountToTransfer, 
+                {value: fee}
+            );
             await transferTx.wait();
 
             const balance = await token.balanceOf(await signer.getAddress());

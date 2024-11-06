@@ -1,4 +1,4 @@
-export const TOKEN_ADDRESS = "0x71BAefde114268C3ca5A1C0529B510Cb9B4242EE";
+export const TOKEN_ADDRESS = "0x20797Ce673e82aE56B69cad610DE392415983781";
 export const TOKEN_ABI = [
   "constructor(address)",
   "error ERC20InsufficientAllowance(address,uint256,uint256)",
@@ -17,6 +17,7 @@ export const TOKEN_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function decimals() view returns (uint8)",
   "function getMessage() view returns (string)",
+  "function mint(address,uint256)",
   "function mint(uint256)",
   "function name() view returns (string)",
   "function owner() view returns (address)",

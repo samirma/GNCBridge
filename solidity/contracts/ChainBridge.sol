@@ -9,16 +9,25 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 contract ChainBridge is Ownable, Pausable, ReentrancyGuard {
     
     mapping(bytes32 => bool) public completedTransfers;
+    
+    uint256 public fee; // Fee in wei
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    constructor(address initialOwner, uint256 initialFee) Ownable(initialOwner) {
+        fee = initialFee;
+    }
 
     event TransferCompleted(address indexed to, bytes32 indexed transferId, uint256 amount);
     event Deposit(address indexed by, uint256 amount, bytes32 indexed transferId);
 
-    function deposit(address _token, uint256 _amount) public whenNotPaused nonReentrant {
+    function updateFee(uint256 newFee) public onlyOwner {
+        fee = newFee;
+    }
+
+    function deposit(address _token, uint256 _amount) public payable whenNotPaused nonReentrant {
         IERC20 token = IERC20(_token);
         require(token.balanceOf(msg.sender) >= _amount, "Not enough balance");
         require(token.allowance(msg.sender, address(this)) >= _amount, "Check the token allowance");
+        require(msg.value == fee, "Incorrect fee amount");
         
         bytes32 transferId = keccak256(abi.encodePacked(msg.sender, block.timestamp, _amount));
         require(!completedTransfers[transferId], "Transfer already completed");
@@ -27,6 +36,9 @@ contract ChainBridge is Ownable, Pausable, ReentrancyGuard {
         
         bool success = token.transferFrom(msg.sender, address(this), _amount);
         require(success, "Transfer failed");
+        
+        // Transfer the fee to the owner
+        payable(owner()).transfer(fee);
         
         emit Deposit(msg.sender, _amount, transferId);
     }
@@ -55,5 +67,4 @@ contract ChainBridge is Ownable, Pausable, ReentrancyGuard {
         require(token.balanceOf(address(this)) >= _amount, "Insufficient token balance");
         token.transfer(owner(), _amount);
     }
-
 }

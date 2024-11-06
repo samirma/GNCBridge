@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 const fs = require('fs');
 const path = require('path');
+const ethers = require('ethers'); 
 
 async function main() {
 
@@ -11,8 +12,9 @@ async function main() {
       deployer.address
   );
 
+  const initialFee = hre.ethers.parseEther("0.01");
   const ChainBridge = await hre.ethers.getContractFactory("ChainBridge");
-  const chainBridge = await ChainBridge.deploy(deployer.address);
+  const chainBridge = await ChainBridge.deploy(deployer.address, initialFee);
 
   //const tokenAddress = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
   //await chainBridge.setToken(tokenAddress);
