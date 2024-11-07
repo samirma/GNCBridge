@@ -14,7 +14,7 @@ const networks = {
         "blockExplorerUrls": ["https://polygonscan.com"]
     },
     'local2': {
-        "chainId": '0x4cd', 
+        "chainId": '0xa86a', 
         "chainName": "local2",
         "rpcUrls": ["http://localhost:8546"],
         "nativeCurrency": {
