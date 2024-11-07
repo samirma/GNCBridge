@@ -10,11 +10,11 @@ async function main() {
       "Deploying contracts with the account:",
       deployer.address
   );
-  const lock = await hre.ethers.deployContract("GncBridge", [deployer.address]);
+  const contract = await hre.ethers.deployContract("GncBridge", [deployer.address]);
 
-  await lock.waitForDeployment();
+  await contract.waitForDeployment();
 
-  console.log(`GncBridge deployed to ${lock.target}`  );
+  console.log(`GncBridge deployed to ${contract.target}`  );
 
   const contractsDir = path.join(__dirname, '..', '..', 'shared', 'constants');
   
@@ -24,8 +24,8 @@ async function main() {
 
   fs.writeFileSync(
     path.join(contractsDir, 'gncBridge.js'),
-    `export const GNC_BRIDGE_ADDRESS = "${lock.target}";\n` +
-    `export const GNC_ABI_BRIDGE = ${JSON.stringify(lock.interface.format('json'), null, 2)};\n`
+    `export const GNC_BRIDGE_ADDRESS = "${contract.target}";\n` +
+    `export const GNC_ABI_BRIDGE = ${JSON.stringify(contract.interface.format('json'), null, 2)};\n`
   );
 
 }

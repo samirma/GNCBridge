@@ -6,21 +6,19 @@ const path = require('path');
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
 
-    console.log(
-        "Deploying contracts with the account:",
-        deployer.address
-    );
-
     await helpers.setBalance(deployer.address, 3000 * 1e18);
 
-    console.log("Account balance:", (await deployer.provider.getBalance(deployer.address)).toString());
-
     const Token = await hre.ethers.getContractFactory("Token");
-    const token = await Token.deploy(deployer.address);
+    const token = await Token.deploy();
 
-    const test = await token.waitForDeployment();
+    const deployerTokenBalance = await token.balanceOf(deployer.address);
+
+    const tokenDecimals = await token.decimals();
 
     console.log("Token contract deployed to:", token.target);
+    console.log("Deployer Address:", deployer.address);
+    console.log("Deployer ETH balance:", (await deployer.provider.getBalance(deployer.address)).toString());
+    console.log("Deployer Token Balance:", hre.ethers.formatUnits(deployerTokenBalance, tokenDecimals));
 
     const contractsDir = path.join(__dirname, '..', '..', 'shared', 'constants');
   
@@ -30,8 +28,8 @@ async function main() {
   
     fs.writeFileSync(
       path.join(contractsDir, 'token.js'),
-      `export const TOKEN_ADDRESS = "${test.target}";\n` +
-      `export const TOKEN_ABI = ${JSON.stringify(test.interface.format('json'), null, 2)};\n`
+      `export const TOKEN_ADDRESS = "${token.target}";\n` +
+      `export const TOKEN_ABI = ${JSON.stringify(token.interface.format('json'), null, 2)};\n`
     );
 
 }

@@ -1,16 +1,13 @@
-export const TOKEN_ADDRESS = "0x20797Ce673e82aE56B69cad610DE392415983781";
+export const TOKEN_ADDRESS = "0x29631b22388c896A2E027E6387CD004DD1B31fB4";
 export const TOKEN_ABI = [
-  "constructor(address)",
+  "constructor()",
   "error ERC20InsufficientAllowance(address,uint256,uint256)",
   "error ERC20InsufficientBalance(address,uint256,uint256)",
   "error ERC20InvalidApprover(address)",
   "error ERC20InvalidReceiver(address)",
   "error ERC20InvalidSender(address)",
   "error ERC20InvalidSpender(address)",
-  "error OwnableInvalidOwner(address)",
-  "error OwnableUnauthorizedAccount(address)",
   "event Approval(address indexed,address indexed,uint256)",
-  "event OwnershipTransferred(address indexed,address indexed)",
   "event Transfer(address indexed,address indexed,uint256)",
   "function allowance(address,address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)",
@@ -20,12 +17,9 @@ export const TOKEN_ABI = [
   "function mint(address,uint256)",
   "function mint(uint256)",
   "function name() view returns (string)",
-  "function owner() view returns (address)",
-  "function renounceOwnership()",
   "function setMessage(string)",
   "function symbol() view returns (string)",
   "function totalSupply() view returns (uint256)",
   "function transfer(address,uint256) returns (bool)",
-  "function transferFrom(address,address,uint256) returns (bool)",
-  "function transferOwnership(address)"
+  "function transferFrom(address,address,uint256) returns (bool)"
 ];

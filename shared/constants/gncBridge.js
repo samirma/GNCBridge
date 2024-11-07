@@ -1,10 +1,11 @@
-export const GNC_BRIDGE_ADDRESS = "0x20797Ce673e82aE56B69cad610DE392415983781";
+export const GNC_BRIDGE_ADDRESS = "0x2D1986e7Cb99B56412ae9e7ba459c577b67E8e7B";
 export const GNC_ABI_BRIDGE = [
   "constructor(address)",
   "error EnforcedPause()",
   "error ExpectedPause()",
   "error OwnableInvalidOwner(address)",
   "error OwnableUnauthorizedAccount(address)",
+  "error ReentrancyGuardReentrantCall()",
   "event Deposit(address indexed,uint256,bytes32 indexed)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "event Paused(address)",
@@ -17,5 +18,7 @@ export const GNC_ABI_BRIDGE = [
   "function release(address,uint256,bytes32) payable",
   "function renounceOwnership()",
   "function transferOwnership(address)",
+  "function withdraw(uint256)",
+  "function withdrawTokens(address,uint256)",
   "receive() payable"
 ];
