@@ -11,8 +11,10 @@ const { getNetworkConfigForBot } = require('shared/networks');
 const GNC_URL = getNetworkConfigForBot(GNC).rpcUrls[0];
 const CHAIN_URL = getNetworkConfigForBot(CHAIN).rpcUrls[0];
 
+const PENDING_LIMIT = 5;
+
 async function main() {
-    console.log(`#### ${ENV} #### Listening for bridge events...`);
+    console.log(`#### ${ENV} #### Processing bridge transactions...`);
 
     const gncProvider = new ethers.JsonRpcProvider(GNC_URL);
     const chainProvider = new ethers.JsonRpcProvider(CHAIN_URL);
@@ -28,9 +30,49 @@ async function main() {
 
     logBalances(chainProvider, chainSigner, gncProvider, gncSigner);
 
-    listenForGncDeposits(gncBridgeContract, chainBridgeContract, chainBridgeWithSigner);
+    async function releaseOnGNC(destinyContractWithSigner, by, amount, transferId) {
+        return destinyContractWithSigner.release(TOKEN_ADDRESS, by, amount, transferId);
+    }
 
-    listenForChainDeposits(chainBridgeContract, gncBridgeContract, gncBridgeWithSigner);
+    async function releaseOnChain(destinyContractWithSigner, by, amount, transferId) {
+        return destinyContractWithSigner.release(by, amount, transferId, { value: amount });
+    }
+
+    async function processInLoop() {
+        while (true) {
+            const startTime1 = new Date();
+            console.log(`${startTime1.toISOString()}:Starting processDeposits for GNC`);
+    
+            await processDeposits(
+                gncBridgeContract,
+                gncBridgeWithSigner,
+                chainBridgeWithSigner,
+                releaseOnGNC
+            );
+    
+            const endTime1 = new Date();
+            console.log(`${endTime1.toISOString()}: Finished processDeposits for GNC`);
+    
+            const startTime2 = new Date();
+            console.log(`${startTime2.toISOString()}: Starting processDeposits for Chain`);
+    
+            await processDeposits(
+                chainBridgeContract,
+                chainBridgeWithSigner,
+                gncBridgeWithSigner,
+                releaseOnChain
+            );
+    
+            const endTime2 = new Date();
+            console.log(`${endTime2.toISOString()}: Finished processDeposits for Chain `);
+    
+            // Delay for 30 seconds
+            await new Promise(resolve => setTimeout(resolve, 30000));
+        }
+    }
+    
+    processInLoop();
+    
 
 }
 
@@ -45,51 +87,63 @@ async function logBalances(chainProvider, chainSigner, gncProvider, gncSigner) {
     console.log(`GNC => Balance: ${gncBalance} ETH`);
 }
 
-function listenForGncDeposits(gncBridgeContract, chainBridgeContract, chainBridgeWithSigner) {
-    console.log(`Listen for deposits on GNC blockchain`);
-    gncBridgeContract.on("Deposit", async (by, amount, transferId) => {
-        try {
-            console.log(`Deposit detected on GNC: ${by} deposited ${amount.toString()}`);
-            
-            // Verify if transfer is already completed on Chain
-            const isCompleted = await chainBridgeContract.completedTransfers(transferId);
-            if (isCompleted) {
-                console.log(`Transfer ${transferId} already completed on Chain`);
-                return;
-            }
-
-            // Release tokens on Chain
-            const tx = await chainBridgeWithSigner.release(TOKEN_ADDRESS, by, amount, transferId);
-            await tx.wait();
-            console.log(`Released ${amount.toString()} tokens to ${by} on Chain`);
-        } catch (error) {
-            console.error(`Error processing GNC deposit: ${error}`);
-        }
+async function logPendingDeposits(bridgContract) {
+    const pendingTransfers = await bridgContract.getDeposits();
+    console.log(`Pending deposits: ${pendingTransfers.length}`);
+    pendingTransfers.forEach((deposit, index) => {
+        console.log(`Deposit #${index + 1}: By Address: ${deposit[0]}  Amount: ${hre.ethers.formatEther(deposit[1])} GNC  Transfer ID: ${deposit[2]}`);
     });
 }
 
-function listenForChainDeposits(chainBridgeContract, gncBridgeContract, gncBridgeWithSigner) {
-    console.log(`Listen for deposits on Chain blockchain`);
-    chainBridgeContract.on("Deposit", async (by, amount, transferId) => {
-        try {
-            console.log(`Deposit detected on Chain: ${by} deposited ${amount.toString()}`);
-            
-            // Verify if transfer is already completed on GNC
-            const isCompleted = await gncBridgeContract.completedTransfers(transferId);
-            if (isCompleted) {
-                console.log(`Transfer ${transferId} already completed on GNC`);
-                return;
-            }
-
-            // Release native currency on GNC
-            const tx = await gncBridgeWithSigner.release(by, amount, transferId, { value: amount });
-            await tx.wait();
-            console.log(`Released ${amount.toString()} native currency to ${by} on GNC`);
-        } catch (error) {
-            console.error(`Error processing Chain deposit: ${error}`);
+async function processDeposits(
+    pendingOriginContract,
+    pendingOriginContractWithSigner,
+    destinyContractWithSigner,
+    releaseFunc
+  ) {
+    console.log(`Processing deposits from ${pendingOriginContract.address} blockchain`);
+  
+    const pendingTransfers = await pendingOriginContract.getDeposits();
+  
+    console.log(`Processing ${pendingTransfers.length} deposits`);
+  
+    const completedTransferIds = [];
+    let processedCount = 0; // Counter to track the number of processed entries
+  
+    for (const transfer of pendingTransfers) {
+      if (processedCount >= PENDING_LIMIT) break; // Exit the loop after processing 5 entries
+  
+      const by = transfer[0];
+      const amount = transfer[1];
+      const transferId = transfer[2];
+  
+      try {
+        const isCompleted = await destinyContractWithSigner.completedTransfers(transferId);
+        if (isCompleted) {
+          console.log(`Transfer ${transferId} already completed`);
+          completedTransferIds.push(transferId);
+          continue;
         }
-    });
-}
+  
+        const tx = await releaseFunc(destinyContractWithSigner, by, amount, transferId);
+        await tx.wait();
+        console.log(`Released ${amount.toString()} to ${by}`);
+  
+        completedTransferIds.push(transferId);
+        processedCount++; // Increment the counter after processing an entry
+      } catch (error) {
+        console.error(`Error processing deposit: ${error}`);
+      }
+    }
+  
+    // Remove completed transfers from pending
+    if (completedTransferIds.length > 0) {
+      await pendingOriginContractWithSigner.removePending(completedTransferIds);
+      console.log(`Removed ${completedTransferIds.length} completed transfers from pending`);
+    }
+    await logPendingDeposits(pendingOriginContract);
+  }
+
 
 main().catch((error) => {
     console.error(error);

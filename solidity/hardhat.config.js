@@ -41,7 +41,7 @@ module.exports = {
       },
     },
     compilers: [
-      { version: "0.8.27" }
+      { version: "0.8.28" }
     ]
   },
 };

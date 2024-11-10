@@ -3,29 +3,29 @@
 import React, { useState, useEffect } from 'react';
 import GNCForm from './GNCForm';
 import ChainForm from './ChainForm';
-import About from './about';
-import MintToken from './MintToken';
-import NetworkSelection from './NetworkSelection'
 import { GNC, CHAIN } from 'shared/constants/env';
-import { getNetworkConfig } from 'shared/networks';
 
 export default function App() {
-  const [state, setState] = useState("");
+  const [state, setState] = useState(CHAIN);
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
-    handleNetworkSelect(CHAIN);
   }, []);
 
   const handleNetworkSelect = (network) => {
     setState(network);
   }
 
+  const toggleNetwork = () => {
+    setState(prevState => (prevState === GNC ? CHAIN : GNC));
+  }
+
   return (
     <div className="row swap_box_border">
       <div className="col-md-12">
-      <br /><br />
-      {/* <NetworkSelection onNetworkSelect={handleNetworkSelect} /> */}
+        <button onClick={toggleNetwork}>
+          {state === GNC ? 'Switch to CHAIN' : 'Switch to GNC'}
+        </button>
         <br /><br />
         {state === GNC && <GNCForm />}
         {state === CHAIN && <ChainForm />}
