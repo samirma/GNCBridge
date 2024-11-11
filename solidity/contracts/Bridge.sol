@@ -21,9 +21,9 @@ abstract contract Bridge is Ownable {
     PendingTransfer[] deposits;
 
     event TransferCompleted(
-        address indexed to, 
-        bytes32 indexed transferId,
-        uint256 amount
+        address indexed to,
+        uint256 amount, 
+        bytes32 indexed transferId
     );
 
     event Deposit(
@@ -73,7 +73,7 @@ abstract contract Bridge is Ownable {
 
     function processRelease(address _to, uint256 _amount, bytes32 _transferId) internal {
         completedTransfers[_transferId] = true;
-        emit TransferCompleted(_to, _transferId, _amount);
+        emit TransferCompleted(_to, _amount, _transferId);
     }
 
 }
