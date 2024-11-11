@@ -67,7 +67,7 @@ async function main() {
             console.log(`${endTime2.toISOString()}: Finished processDeposits for Chain `);
     
             // Delay for 30 seconds
-            await new Promise(resolve => setTimeout(resolve, 30000));
+            await new Promise(resolve => setTimeout(resolve, 60000));
         }
     }
     

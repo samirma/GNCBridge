@@ -1,4 +1,4 @@
-export const CHAIN_BRIDGE_ADDRESS = "0x559842ce59b5A8Ee608CDE766023D50Fbf5d8BeD";
+export const CHAIN_BRIDGE_ADDRESS = "0xc2510D21b849223845010e12FBA718022467e30B";
 export const CHAIN_ABI_BRIDGE = [
   "constructor(address,uint256)",
   "error EnforcedPause()",
@@ -9,7 +9,7 @@ export const CHAIN_ABI_BRIDGE = [
   "event Deposit(address indexed,uint256,bytes32 indexed)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "event Paused(address)",
-  "event TransferCompleted(address indexed,bytes32 indexed,uint256)",
+  "event TransferCompleted(address indexed,uint256,bytes32 indexed)",
   "event Unpaused(address)",
   "function completedTransfers(bytes32) view returns (bool)",
   "function deposit(address,uint256) payable",

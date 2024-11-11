@@ -1,4 +1,4 @@
-export const GNC_BRIDGE_ADDRESS = "0x926590B7b8CC67eAFc05b105c0b11F7CA0aFBF8B";
+export const GNC_BRIDGE_ADDRESS = "0x71BAefde114268C3ca5A1C0529B510Cb9B4242EE";
 export const GNC_ABI_BRIDGE = [
   "constructor(address)",
   "error EnforcedPause()",
@@ -9,7 +9,7 @@ export const GNC_ABI_BRIDGE = [
   "event Deposit(address indexed,uint256,bytes32 indexed)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "event Paused(address)",
-  "event TransferCompleted(address indexed,bytes32 indexed,uint256)",
+  "event TransferCompleted(address indexed,uint256,bytes32 indexed)",
   "event Unpaused(address)",
   "function completedTransfers(bytes32) view returns (bool)",
   "function deposit() payable",

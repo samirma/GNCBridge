@@ -45,7 +45,7 @@ const networks = {
     'gnc_main': {
         "chainId": '0x4cd', 
         "chainName": "GNC",
-        "rpcUrls": ["http://mainnet.greenercoin.io:8545"],
+        "rpcUrls": ["https://mainnet.greenercoin.io"],
         "nativeCurrency": {
             "name": 'GNC',
             "symbol": 'GNC',
@@ -77,7 +77,7 @@ const networks = {
 };
 
 const networksForBot = {
-    'polygon': {
+    'polygon_': {
         "chainId": "0x89",
         "chainName": 'Matic(Polygon) Mainnet',
         "nativeCurrency": { "name": 'POL', "symbol": 'POL', "decimals": 18 },
