@@ -44,7 +44,7 @@ const networks = {
     },
     'gnc_main': {
         "chainId": '0x4cd', 
-        "chainName": "GNC",
+        "chainName": "Greenerchain",
         "rpcUrls": ["https://mainnet.greenercoin.io"],
         "nativeCurrency": {
             "name": 'GNC',
@@ -55,7 +55,7 @@ const networks = {
     },
     'gnc_test': {
         "chainId": '0x4cd', 
-        "chainName": 'Greener Coin Testnet',
+        "chainName": 'Greenerchain Testnet',
         "nativeCurrency": {
             "name": 'GNC',
             "symbol": 'GNC',
