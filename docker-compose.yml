@@ -24,6 +24,7 @@ services:
     depends_on:
       - shared
     command: ["sh", "start.sh"]
+    restart: always
   shared:
       image: busybox
       volumes:
