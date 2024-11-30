@@ -22,6 +22,16 @@ export default function RootLayout({ children }) {
         <meta name="author" content="The wonderful GreenerChain team" />
       </head>
       <body className={inter.className}>
+        <div style={{ textAlign: 'center', margin: '25px' }}>
+          <img
+            fetchpriority="high"
+            width={2581}
+            height={556}
+            src="https://www.greenercoin.io/wp-content/uploads/2023/01/Greenercoin-horizontal_light.png"
+            alt="GreenerCoin I The first native token of GreenerChain, the certified green blockchain"
+            style={{ maxWidth: '200px', height: '47px', textAlign: 'center' }}
+          />
+        </div>
         <div className="container-fluid">
           <div className="row">
           <div id="dev" className="dev_show">
